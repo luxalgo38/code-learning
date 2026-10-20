@@ -118,20 +118,6 @@
   }
   .nav-links a:hover { background: var(--bg-3); color: var(--text-hi); text-decoration: none; }
 
-  .btn-deploy {
-    background: var(--green);
-    color: #fff !important;
-    padding: 7px 14px !important;
-    border-radius: 6px;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    transition: 0.2s;
-  }
-  .btn-deploy:hover { background: var(--green-2); text-decoration: none; }
-  .btn-deploy svg { width: 14px; height: 14px; }
-
   .menu-toggle {
     display: none;
     background: none;
@@ -142,6 +128,7 @@
     cursor: pointer;
     font-size: 18px;
     line-height: 1;
+    margin-left: auto;
   }
 
   /* ============ LAYOUT ============ */
@@ -193,14 +180,6 @@
     color: var(--accent);
     border-left-color: var(--accent);
     font-weight: 600;
-  }
-
-  .sidebar nav a code {
-    background: var(--bg-3);
-    padding: 1px 5px;
-    border-radius: 4px;
-    font-size: 12px;
-    color: var(--code-s);
   }
 
   /* ============ MAIN CONTENT ============ */
@@ -348,13 +327,6 @@
     margin: 28px 0 10px;
   }
 
-  h4.subhead-sm {
-    font-size: 15px;
-    font-weight: 700;
-    color: var(--text-hi);
-    margin: 20px 0 8px;
-  }
-
   p { margin: 12px 0; }
   ul, ol { margin: 12px 0 12px 24px; }
   li { margin: 6px 0; }
@@ -452,7 +424,6 @@
   .copy-btn.copied { background: var(--accent-2); color: #fff; border-color: var(--accent-2); }
   .copy-btn svg { width: 12px; height: 12px; }
 
-  /* But in .code-header case, position normally */
   .code-block .copy-btn.in-header {
     position: static;
     top: auto; right: auto;
@@ -678,7 +649,7 @@
   }
   .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-  /* ============ OVERLAY (mobile) ============ */
+  /* ============ OVERLAY ============ */
   .overlay {
     display: none;
     position: fixed;
@@ -691,14 +662,13 @@
 
   /* ============ RESPONSIVE ============ */
   @media (max-width: 900px) {
-    .main { padding: 30px 24px 60px; }
+    .main { padding: 30px 24px 60px; margin-left: 0; }
     .hero h1 { font-size: 32px; }
     .hero p { font-size: 15px; }
     .nav-links { display: none; }
     .menu-toggle { display: block; }
     .sidebar { transform: translateX(-100%); }
     .sidebar.open { transform: translateX(0); }
-    .main { margin-left: 0; }
     .footer-grid { grid-template-columns: 1fr; gap: 20px; }
     .footer { padding: 30px 24px 20px; }
     .nav { padding: 0 14px; gap: 10px; }
@@ -712,7 +682,6 @@
     .footer-bottom { font-size: 11px; }
   }
 
-  /* Scrollbar */
   ::-webkit-scrollbar { width: 10px; height: 10px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 5px; }
@@ -732,16 +701,11 @@
   </a>
 
   <div class="nav-links">
+    <a href="#overview">Overview</a>
     <a href="#quickstart">Quick Start</a>
     <a href="#explained">Explained</a>
     <a href="#examples">Examples</a>
     <a href="#faq">FAQ</a>
-    <a href="https://app.netlify.com/start" class="btn-deploy" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 2L2 22h20z"></path>
-      </svg>
-      Deploy
-    </a>
   </div>
 
   <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
@@ -779,7 +743,6 @@
     <nav>
       <a href="#troubleshoot">Troubleshooting</a>
       <a href="#faq">FAQ</a>
-      <a href="#deploy">Deploy to Netlify</a>
     </nav>
   </aside>
 
@@ -799,11 +762,11 @@
         </h1>
         <p>
           Professional documentation for the database layer of a WhatsApp bot.
-          Singleton pattern · SQLite + Postgres support · Netlify deploy ready.
+          Singleton pattern · SQLite + Postgres support · Clean, production-ready code.
         </p>
         <div class="hero-actions">
-          <a href="#quickstart" class="btn btn-primary">
-            Get Started
+          <a href="#overview" class="btn btn-primary">
+            View Source
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
@@ -866,6 +829,79 @@
               <span>Clean console output</span>
             </div>
           </div>
+        </div>
+
+        <h3 class="subhead">📄 Full Source Code</h3>
+        <p>
+          Complete <code>lib/database.js</code> — copy this file directly into your project.
+          Explained line-by-line in the <a href="#explained">next section</a>.
+        </p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="fname">
+              <div class="dots"><span></span><span></span><span></span></div>
+              lib/database.js
+            </div>
+            <button class="copy-btn in-header" data-copy="ovFull">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              Copy
+            </button>
+          </div>
+<pre><code id="ovFull">const Sequelize = require('sequelize');
+
+class DatabaseManager {
+    static instance = null;
+
+    static getInstance() {
+        if (!DatabaseManager.instance) {
+            const DATABASE_URL = process.env.DATABASE_URL || './database.db';
+
+            DatabaseManager.instance =
+                DATABASE_URL === './database.db'
+                    ? new Sequelize({
+                            dialect: 'sqlite',
+                            storage: DATABASE_URL,
+                            logging: false,
+                      })
+                    : new Sequelize(DATABASE_URL, {
+                            dialect: 'postgres',
+                            ssl: true,
+                            protocol: 'postgres',
+                            dialectOptions: {
+                                native: true,
+                                ssl: { require: true, rejectUnauthorized: false },
+                            },
+                            logging: false,
+                      });
+        }
+        return DatabaseManager.instance;
+    }
+}
+
+const DATABASE = DatabaseManager.getInstance();
+
+DATABASE.sync()
+    .then(() =&gt; {
+        console.log('Database synchronized successfully.');
+    })
+    .catch((error) =&gt; {
+        console.error('Error synchronizing the database:', error);
+    });
+
+module.exports = { DATABASE };</code></pre>
+        </div>
+
+        <div class="callout info">
+          <div class="callout-title">💡 Tip</div>
+          <p>
+            This file is safe to copy as-is. Just make sure <code>sequelize</code> and
+            <code>sqlite3</code> (or <code>pg</code>) are installed. See
+            <a href="#install">Installation</a> for details.
+          </p>
         </div>
       </section>
 
@@ -988,53 +1024,6 @@ DATABASE.authenticate()
       <section id="explained">
         <h2 class="section-heading"><span class="num">5</span>Line-by-Line Explained</h2>
         <p class="section-sub">Every line of the source, explained in Sinhala.</p>
-
-        <h3 class="subhead">Full source code</h3>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="full">Copy Full</button>
-<pre><code id="full">const Sequelize = require('sequelize');
-
-class DatabaseManager {
-    static instance = null;
-
-    static getInstance() {
-        if (!DatabaseManager.instance) {
-            const DATABASE_URL = process.env.DATABASE_URL || './database.db';
-
-            DatabaseManager.instance =
-                DATABASE_URL === './database.db'
-                    ? new Sequelize({
-                            dialect: 'sqlite',
-                            storage: DATABASE_URL,
-                            logging: false,
-                      })
-                    : new Sequelize(DATABASE_URL, {
-                            dialect: 'postgres',
-                            ssl: true,
-                            protocol: 'postgres',
-                            dialectOptions: {
-                                native: true,
-                                ssl: { require: true, rejectUnauthorized: false },
-                            },
-                            logging: false,
-                      });
-        }
-        return DatabaseManager.instance;
-    }
-}
-
-const DATABASE = DatabaseManager.getInstance();
-
-DATABASE.sync()
-    .then(() =&gt; {
-        console.log('Database synchronized successfully.');
-    })
-    .catch((error) =&gt; {
-        console.error('Error synchronizing the database:', error);
-    });
-
-module.exports = { DATABASE };</code></pre>
-        </div>
 
         <h3 class="subhead">① Import Sequelize</h3>
         <div class="code-block">
@@ -1333,55 +1322,8 @@ startBot().catch(console.error);</code></pre>
         <h3 class="subhead">Should I commit database.db to git?</h3>
         <p>No. Add it to <code>.gitignore</code> — databases contain user data and should never be in version control.</p>
 
-        <h3 class="subhead">Does this work with Netlify?</h3>
-        <p>This particular file is a Node.js module and does not run on Netlify's static hosting — it runs on your bot's server. But this documentation site itself is fully Netlify-ready (see next section).</p>
-      </section>
-
-      <!-- ============ DEPLOY ============ -->
-      <section id="deploy">
-        <h2 class="section-heading"><span class="num">12</span>Deploy to Netlify</h2>
-        <p class="section-sub">Ship this documentation site in under a minute.</p>
-
-        <h3 class="subhead">Option A — Drag &amp; drop</h3>
-        <ol>
-          <li>Save this file as <code>index.html</code> in a folder.</li>
-          <li>Go to <a href="https://app.netlify.com/drop" target="_blank" rel="noopener">app.netlify.com/drop</a>.</li>
-          <li>Drag the folder into the drop zone.</li>
-          <li>Netlify generates a live URL instantly. 🎉</li>
-        </ol>
-
-        <h3 class="subhead">Option B — Connect a Git repo</h3>
-        <ol>
-          <li>Push your folder to GitHub.</li>
-          <li>In Netlify: <strong>Add new site → Import from Git</strong>.</li>
-          <li>Select the repo. No build command needed (static HTML).</li>
-          <li>Publish directory: <code>/</code> (root).</li>
-          <li>Click <strong>Deploy</strong>.</li>
-        </ol>
-
-        <div class="callout info">
-          <div class="callout-title">📁 Optional: netlify.toml</div>
-          <p>Drop this file in your project root for production-grade headers and redirects.</p>
-        </div>
-
-        <div class="code-block">
-          <button class="copy-btn" data-copy="netlify">Copy netlify.toml</button>
-<pre><code id="netlify">[build]
-  publish = "."
-  command = ""
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200</code></pre>
-        </div>
+        <h3 class="subhead">Can I run this on Netlify?</h3>
+        <p>This file runs on your bot's Node.js server, not on Netlify. But this documentation site itself can be hosted anywhere — Netlify, GitHub Pages, Vercel, or any static host.</p>
       </section>
 
       <!-- ============ FOOTER ============ -->
@@ -1391,15 +1333,15 @@ startBot().catch(console.error);</code></pre>
             <div class="footer-brand">PathumTech Docs</div>
             <p class="footer-desc">
               Professional documentation site for the <code>lib/database.js</code>
-              module. Built for WhatsApp bot developers. Deployed on Netlify.
+              module. Built for WhatsApp bot developers.
             </p>
           </div>
           <div>
             <h5>Docs</h5>
             <ul>
+              <li><a href="#overview">Overview</a></li>
               <li><a href="#quickstart">Quick Start</a></li>
               <li><a href="#explained">Explained</a></li>
-              <li><a href="#examples">Examples</a></li>
             </ul>
           </div>
           <div>
@@ -1407,7 +1349,7 @@ startBot().catch(console.error);</code></pre>
             <ul>
               <li><a href="#troubleshoot">Troubleshooting</a></li>
               <li><a href="#faq">FAQ</a></li>
-              <li><a href="#deploy">Deploy</a></li>
+              <li><a href="#api">API Reference</a></li>
             </ul>
           </div>
         </div>
@@ -1613,7 +1555,6 @@ startBot().catch(console.error);</code></pre>
 
     overlay.addEventListener('click', close);
 
-    // close on link click
     sidebar.querySelectorAll('a').forEach(function (a) {
       a.addEventListener('click', function () {
         if (window.innerWidth <= 900) close();
