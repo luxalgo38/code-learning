@@ -1,263 +1,668 @@
 <!DOCTYPE html>
-<html lang="si">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>lib/database.js — README + Copy Code</title>
-
-<link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<meta name="description" content="PathumTech Docs — Professional documentation for lib/database.js — Sequelize connection setup (SQLite + Postgres) for WhatsApp bots." />
+<meta name="theme-color" content="#0d1117" />
+<title>PathumTech Docs — lib/database.js</title>
 
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* ============ RESET & BASE ============ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0d1117;
+    --bg-2:      #161b22;
+    --bg-3:      #21262d;
+    --border:    #30363d;
+    --border-2:  #21262d;
+    --text:      #c9d1d9;
+    --text-hi:   #f0f6fc;
+    --text-mute: #8b949e;
+    --accent:    #58a6ff;
+    --accent-2:  #1f6feb;
+    --green:     #238636;
+    --green-2:   #2ea043;
+    --red:       #f85149;
+    --yellow:    #d29922;
+    --code-k:    #ff7b72;
+    --code-s:    #a5d6ff;
+    --code-c:    #8b949e;
+    --code-n:    #79c0ff;
+    --nav-h:     60px;
+    --side-w:    260px;
+    --radius:    10px;
+    --font:      -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --mono:      'SF Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+  }
+
+  html { scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + 20px); }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #0d1117;
-    color: #c9d1d9;
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
     line-height: 1.7;
-    padding: 20px 16px 60px;
+    font-size: 15px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  .wrap {
-    max-width: 980px;
-    margin: 0 auto;
-  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
 
-  /* ============ TOP MAIN CODE CARD ============ */
-  .main-card {
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 14px;
-    overflow: hidden;
-    margin-bottom: 40px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-  }
+  code { font-family: var(--mono); }
 
-  .header {
+  /* ============ TOP NAV ============ */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--nav-h);
+    background: rgba(13, 17, 23, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 14px 20px;
-    background: #0d1117;
-    border-bottom: 1px solid #30363d;
+    padding: 0 20px;
+    z-index: 100;
+    gap: 20px;
   }
 
-  .header-left { display: flex; align-items: center; gap: 10px; }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    color: var(--text-hi);
+    font-size: 16px;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+  .nav-logo:hover { text-decoration: none; }
 
-  .dots { display: flex; gap: 6px; }
-  .dot { width: 12px; height: 12px; border-radius: 50%; }
-  .dot.red { background: #ff5f56; }
-  .dot.yellow { background: #ffbd2e; }
-  .dot.green { background: #27c93f; }
+  .logo-mark {
+    width: 30px; height: 30px;
+    background: linear-gradient(135deg, var(--accent-2), var(--green-2));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 800; font-size: 16px;
+  }
 
-  .filename {
-    font-family: 'Consolas', monospace;
+  .logo-text { font-weight: 700; letter-spacing: -0.3px; }
+  .logo-text small {
+    display: block;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-mute);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    line-height: 1;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+    align-items: center;
+  }
+
+  .nav-links a {
+    padding: 7px 12px;
+    border-radius: 6px;
+    color: var(--text);
     font-size: 14px;
-    color: #8b949e;
-    margin-left: 10px;
+    font-weight: 500;
+    transition: 0.2s;
+  }
+  .nav-links a:hover { background: var(--bg-3); color: var(--text-hi); text-decoration: none; }
+
+  .btn-deploy {
+    background: var(--green);
+    color: #fff !important;
+    padding: 7px 14px !important;
+    border-radius: 6px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: 0.2s;
+  }
+  .btn-deploy:hover { background: var(--green-2); text-decoration: none; }
+  .btn-deploy svg { width: 14px; height: 14px; }
+
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
   }
 
-  .copy-btn {
+  /* ============ LAYOUT ============ */
+  .layout {
+    display: flex;
+    padding-top: var(--nav-h);
+    min-height: 100vh;
+  }
+
+  /* ============ SIDEBAR ============ */
+  .sidebar {
+    width: var(--side-w);
+    position: fixed;
+    top: var(--nav-h);
+    left: 0;
+    bottom: 0;
+    overflow-y: auto;
+    background: var(--bg);
+    border-right: 1px solid var(--border);
+    padding: 24px 16px 40px;
+    transition: transform 0.3s ease;
+    z-index: 50;
+  }
+
+  .sidebar h3 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-mute);
+    margin: 20px 0 8px 8px;
+    font-weight: 700;
+  }
+  .sidebar h3:first-child { margin-top: 0; }
+
+  .sidebar nav a {
+    display: block;
+    padding: 7px 12px;
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 14px;
+    margin-bottom: 2px;
+    border-left: 2px solid transparent;
+    transition: 0.15s;
+    text-decoration: none;
+  }
+  .sidebar nav a:hover { background: var(--bg-2); color: var(--text-hi); text-decoration: none; }
+  .sidebar nav a.active {
+    background: var(--bg-2);
+    color: var(--accent);
+    border-left-color: var(--accent);
+    font-weight: 600;
+  }
+
+  .sidebar nav a code {
+    background: var(--bg-3);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--code-s);
+  }
+
+  /* ============ MAIN CONTENT ============ */
+  .main {
+    flex: 1;
+    margin-left: var(--side-w);
+    padding: 40px 48px 80px;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .content-wrap { max-width: 860px; margin: 0 auto; }
+
+  /* ============ HERO ============ */
+  .hero {
+    padding: 20px 0 40px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-mute);
+    margin-bottom: 16px;
+  }
+  .badge .dot-live {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green-2);
+    box-shadow: 0 0 8px var(--green-2);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .hero h1 {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    color: var(--text-hi);
+    line-height: 1.15;
+    margin-bottom: 14px;
+  }
+
+  .hero h1 .grad {
+    background: linear-gradient(135deg, var(--accent), var(--green-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    font-size: 17px;
+    color: var(--text-mute);
+    max-width: 640px;
+    margin-bottom: 24px;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: #238636;
-    color: #fff;
-    border: none;
-    padding: 9px 16px;
+    padding: 10px 18px;
     border-radius: 8px;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
+    transition: 0.2s;
+    border: 1px solid transparent;
     cursor: pointer;
-    transition: all 0.2s ease;
     font-family: inherit;
-  }
-  .copy-btn:hover { background: #2ea043; transform: translateY(-1px); }
-  .copy-btn:active { transform: translateY(0); }
-  .copy-btn.copied { background: #1f6feb; }
-  .copy-btn svg { width: 16px; height: 16px; }
-
-  .code-wrap {
-    max-height: 70vh;
-    overflow: auto;
-  }
-
-  pre {
-    margin: 0;
-    padding: 20px 24px;
-    background: transparent !important;
-    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-    font-size: 14px;
-    line-height: 1.65;
-    overflow-x: auto;
-  }
-
-  code.hljs {
-    background: transparent !important;
-    padding: 0 !important;
-  }
-
-  /* Scrollbars */
-  .code-wrap::-webkit-scrollbar,
-  pre::-webkit-scrollbar { width: 10px; height: 10px; }
-  .code-wrap::-webkit-scrollbar-track,
-  pre::-webkit-scrollbar-track { background: #0d1117; }
-  .code-wrap::-webkit-scrollbar-thumb,
-  pre::-webkit-scrollbar-thumb { background: #30363d; border-radius: 5px; }
-  .code-wrap::-webkit-scrollbar-thumb:hover,
-  pre::-webkit-scrollbar-thumb:hover { background: #484f58; }
-
-  /* ============ README CONTENT ============ */
-  .readme {
-    background: #0d1117;
-    border: 1px solid #30363d;
-    border-radius: 14px;
-    padding: 32px 36px 40px;
-  }
-
-  .readme h1 {
-    font-size: 28px;
-    color: #f0f6fc;
-    padding-bottom: 14px;
-    border-bottom: 1px solid #30363d;
-    margin-bottom: 20px;
-  }
-
-  .readme h2 {
-    font-size: 22px;
-    color: #f0f6fc;
-    margin-top: 40px;
-    margin-bottom: 16px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #21262d;
-  }
-
-  .readme h3 {
-    font-size: 17px;
-    color: #f0f6fc;
-    margin-top: 26px;
-    margin-bottom: 12px;
-  }
-
-  .readme p {
-    margin: 12px 0;
-    font-size: 15px;
-    color: #c9d1d9;
-  }
-
-  .readme blockquote {
-    border-left: 4px solid #1f6feb;
-    background: #161b22;
-    padding: 12px 18px;
-    margin: 16px 0;
-    border-radius: 0 8px 8px 0;
-    color: #8b949e;
-    font-size: 14px;
-  }
-
-  .readme ul, .readme ol {
-    margin: 12px 0 12px 24px;
-    font-size: 15px;
-  }
-
-  .readme li { margin: 6px 0; }
-
-  .readme a {
-    color: #58a6ff;
     text-decoration: none;
   }
-  .readme a:hover { text-decoration: underline; }
+  .btn:hover { text-decoration: none; }
 
-  .readme hr {
-    border: none;
-    border-top: 1px solid #30363d;
-    margin: 30px 0;
+  .btn-primary {
+    background: var(--accent-2);
+    color: #fff;
+  }
+  .btn-primary:hover { background: #388bfd; }
+
+  .btn-secondary {
+    background: var(--bg-2);
+    color: var(--text);
+    border-color: var(--border);
+  }
+  .btn-secondary:hover { background: var(--bg-3); color: var(--text-hi); }
+
+  .btn svg { width: 16px; height: 16px; }
+
+  /* ============ SECTIONS ============ */
+  section { padding: 40px 0; border-bottom: 1px solid var(--border-2); }
+  section:last-of-type { border-bottom: none; }
+
+  .section-heading {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text-hi);
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+    scroll-margin-top: calc(var(--nav-h) + 20px);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-heading .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px; height: 30px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
   }
 
-  .readme code:not(.hljs) {
-    background: #161b22;
+  .section-sub {
+    font-size: 15px;
+    color: var(--text-mute);
+    margin-bottom: 24px;
+    max-width: 720px;
+  }
+
+  h3.subhead {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-hi);
+    margin: 28px 0 10px;
+  }
+
+  h4.subhead-sm {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-hi);
+    margin: 20px 0 8px;
+  }
+
+  p { margin: 12px 0; }
+  ul, ol { margin: 12px 0 12px 24px; }
+  li { margin: 6px 0; }
+
+  /* Inline code */
+  p code, li code, td code, blockquote code {
+    background: var(--bg-2);
     padding: 2px 6px;
     border-radius: 4px;
-    font-family: 'Consolas', monospace;
-    font-size: 0.9em;
-    color: #ff7b72;
+    font-size: 0.88em;
+    color: var(--code-k);
+    border: 1px solid var(--border-2);
   }
 
-  /* Code block inside README */
+  /* ============ CODE BLOCKS ============ */
   .code-block {
     position: relative;
-    margin: 16px 0;
-    border-radius: 10px;
+    margin: 16px 0 20px;
+    border-radius: var(--radius);
     overflow: hidden;
-    background: #161b22;
-    border: 1px solid #30363d;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
   }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #0d1117;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-mute);
+  }
+
+  .code-header .fname {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .code-header .dots {
+    display: flex;
+    gap: 5px;
+    margin-right: 8px;
+  }
+  .code-header .dots span {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+  .code-header .dots span:nth-child(1) { background: #ff5f56; }
+  .code-header .dots span:nth-child(2) { background: #ffbd2e; }
+  .code-header .dots span:nth-child(3) { background: #27c93f; }
 
   .code-block pre {
-    padding: 16px 60px 16px 20px;
+    margin: 0;
+    padding: 16px 60px 16px 18px;
+    font-family: var(--mono);
     font-size: 13.5px;
-    max-height: 500px;
-    overflow: auto;
+    line-height: 1.7;
+    overflow-x: auto;
+    color: #e6edf3;
+    background: var(--bg-2);
   }
+  .code-block pre code { display: block; font-family: inherit; }
 
-  .copy-mini {
+  /* Syntax colors */
+  .k { color: var(--code-k); }
+  .s { color: var(--code-s); }
+  .c { color: var(--code-c); font-style: italic; }
+  .n { color: var(--code-n); }
+
+  /* Copy button */
+  .copy-btn {
     position: absolute;
     top: 8px;
     right: 8px;
-    background: #21262d;
-    color: #c9d1d9;
-    border: 1px solid #30363d;
+    background: var(--bg-3);
+    color: var(--text);
+    border: 1px solid var(--border);
     padding: 5px 10px;
     border-radius: 6px;
     font-size: 11px;
+    font-weight: 600;
     cursor: pointer;
-    font-family: inherit;
+    font-family: var(--font);
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    transition: 0.2s;
+    transition: 0.15s;
     z-index: 2;
   }
-  .copy-mini:hover { background: #30363d; color: #fff; }
-  .copy-mini.copied { background: #1f6feb; color: #fff; border-color: #1f6feb; }
-  .copy-mini svg { width: 12px; height: 12px; }
+  .copy-btn:hover { background: var(--border); color: var(--text-hi); }
+  .copy-btn.copied { background: var(--accent-2); color: #fff; border-color: var(--accent-2); }
+  .copy-btn svg { width: 12px; height: 12px; }
 
-  /* Tables */
-  .readme table {
+  /* But in .code-header case, position normally */
+  .code-block .copy-btn.in-header {
+    position: static;
+    top: auto; right: auto;
+  }
+
+  /* ============ TABLES ============ */
+  .table-wrap { overflow-x: auto; margin: 16px 0; border-radius: var(--radius); border: 1px solid var(--border); }
+
+  table {
     width: 100%;
     border-collapse: collapse;
-    margin: 16px 0;
     font-size: 14px;
-    background: #161b22;
-    border-radius: 8px;
-    overflow: hidden;
+    background: var(--bg-2);
+    min-width: 480px;
   }
-
-  .readme th {
-    background: #21262d;
-    color: #f0f6fc;
+  thead { background: var(--bg-3); }
+  th {
+    color: var(--text-hi);
     padding: 10px 14px;
     text-align: left;
-    border: 1px solid #30363d;
     font-weight: 600;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-2);
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: #1c2128; }
+
+  /* ============ CALLOUTS ============ */
+  .callout {
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    margin: 16px 0;
+    border-left: 4px solid;
+    background: var(--bg-2);
+    font-size: 14px;
+  }
+  .callout p { margin: 4px 0; }
+  .callout strong { color: var(--text-hi); }
+
+  .callout.info    { border-color: var(--accent); }
+  .callout.warn    { border-color: var(--yellow); }
+  .callout.danger  { border-color: var(--red); }
+  .callout.success { border-color: var(--green-2); }
+
+  .callout-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    color: var(--text-hi);
+    margin-bottom: 6px;
+    font-size: 14px;
   }
 
-  .readme td {
-    padding: 9px 14px;
-    border: 1px solid #30363d;
+  /* ============ QUICK START GRID ============ */
+  .quick-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin: 20px 0;
   }
 
-  .readme tr:hover td { background: #1c2128; }
+  .quick-card {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    transition: 0.2s;
+    position: relative;
+  }
+  .quick-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
 
-  /* Toast */
+  .quick-step {
+    display: inline-flex;
+    width: 26px; height: 26px;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-2);
+    color: #fff;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+
+  .quick-card h4 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-hi);
+    margin-bottom: 6px;
+  }
+  .quick-card p { font-size: 13px; margin: 0; color: var(--text-mute); }
+
+  /* ============ FEATURE LIST ============ */
+  .feature-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .feature-item {
+    display: flex;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  .feature-icon {
+    font-size: 20px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .feature-item strong { color: var(--text-hi); display: block; margin-bottom: 2px; }
+  .feature-item span { font-size: 13px; color: var(--text-mute); }
+
+  /* ============ FOOTER ============ */
+  .footer {
+    margin-top: 60px;
+    padding: 40px 48px 30px;
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+  }
+
+  .footer-grid {
+    max-width: 860px;
+    margin: 0 auto 24px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 30px;
+  }
+
+  .footer-brand {
+    color: var(--text-hi);
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+
+  .footer-desc {
+    color: var(--text-mute);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .footer h5 {
+    color: var(--text-hi);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  .footer ul { list-style: none; margin: 0; padding: 0; }
+  .footer li { margin: 6px 0; }
+  .footer li a { color: var(--text-mute); font-size: 13px; }
+  .footer li a:hover { color: var(--accent); }
+
+  .footer-bottom {
+    max-width: 860px;
+    margin: 0 auto;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-2);
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-mute);
+  }
+
+  /* ============ BACK TO TOP ============ */
+  .back-to-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: var(--accent-2);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.3s;
+    z-index: 90;
+    box-shadow: 0 6px 20px rgba(31, 111, 235, 0.4);
+  }
+  .back-to-top.visible { opacity: 1; pointer-events: auto; }
+  .back-to-top:hover { background: #388bfd; transform: translateY(-2px); }
+  .back-to-top svg { width: 18px; height: 18px; }
+
+  /* ============ TOAST ============ */
   .toast {
     position: fixed;
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%) translateY(100px);
-    background: #238636;
+    background: var(--green);
     color: #fff;
     padding: 12px 24px;
     border-radius: 10px;
@@ -268,151 +673,326 @@
     transition: all 0.3s ease;
     pointer-events: none;
     z-index: 9999;
+    max-width: 90vw;
+    text-align: center;
   }
-  .toast.show {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* ============ OVERLAY (mobile) ============ */
+  .overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 40;
+    top: var(--nav-h);
+  }
+  .overlay.visible { display: block; }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 900px) {
+    .main { padding: 30px 24px 60px; }
+    .hero h1 { font-size: 32px; }
+    .hero p { font-size: 15px; }
+    .nav-links { display: none; }
+    .menu-toggle { display: block; }
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; }
+    .footer-grid { grid-template-columns: 1fr; gap: 20px; }
+    .footer { padding: 30px 24px 20px; }
+    .nav { padding: 0 14px; gap: 10px; }
+    .section-heading { font-size: 22px; }
   }
 
-  @media (max-width: 640px) {
-    body { padding: 12px 8px 40px; }
-    .readme { padding: 20px 16px 28px; }
-    .readme h1 { font-size: 22px; }
-    .readme h2 { font-size: 18px; }
-    .readme h3 { font-size: 15px; }
-    .readme table { font-size: 12px; }
-    .readme th, .readme td { padding: 6px 8px; }
+  @media (max-width: 480px) {
+    .hero h1 { font-size: 26px; }
+    .main { padding: 24px 16px 50px; }
+    .code-block pre { font-size: 12.5px; padding: 14px 48px 14px 12px; }
+    .footer-bottom { font-size: 11px; }
   }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 5px; }
+  ::-webkit-scrollbar-thumb:hover { background: #484f58; }
 </style>
 </head>
 <body>
 
-<div class="wrap">
-
-  <!-- ============ MAIN CODE CARD ============ -->
-  <div class="main-card">
-    <div class="header">
-      <div class="header-left">
-        <div class="dots">
-          <span class="dot red"></span>
-          <span class="dot yellow"></span>
-          <span class="dot green"></span>
-        </div>
-        <span class="filename">lib/database.js</span>
-      </div>
-      <button class="copy-btn" id="copyMainBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-             stroke-linecap="round" stroke-linejoin="round">
-          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-        </svg>
-        <span id="mainBtnText">Copy Full Code</span>
-      </button>
+<!-- ============ TOP NAV ============ -->
+<nav class="nav">
+  <a href="#top" class="nav-logo">
+    <div class="logo-mark">P</div>
+    <div class="logo-text">
+      PathumTech
+      <small>Docs</small>
     </div>
-    <div class="code-wrap">
-<pre><code class="language-javascript" id="mainCode">const Sequelize = require('sequelize');
+  </a>
 
-class DatabaseManager {
-    static instance = null;
-
-    static getInstance() {
-        if (!DatabaseManager.instance) {
-            const DATABASE_URL = process.env.DATABASE_URL || './database.db';
-
-            DatabaseManager.instance =
-                DATABASE_URL === './database.db'
-                    ? new Sequelize({
-                            dialect: 'sqlite',
-                            storage: DATABASE_URL,
-                            logging: false,
-                      })
-                    : new Sequelize(DATABASE_URL, {
-                            dialect: 'postgres',
-                            ssl: true,
-                            protocol: 'postgres',
-                            dialectOptions: {
-                                native: true,
-                                ssl: { require: true, rejectUnauthorized: false },
-                            },
-                            logging: false,
-                      });
-        }
-        return DatabaseManager.instance;
-    }
-}
-
-const DATABASE = DatabaseManager.getInstance();
-
-DATABASE.sync()
-    .then(() => {
-        console.log('Database synchronized successfully.');
-    })
-    .catch((error) => {
-        console.error('Error synchronizing the database:', error);
-    });
-
-module.exports = { DATABASE };</code></pre>
-    </div>
+  <div class="nav-links">
+    <a href="#quickstart">Quick Start</a>
+    <a href="#explained">Explained</a>
+    <a href="#examples">Examples</a>
+    <a href="#faq">FAQ</a>
+    <a href="https://app.netlify.com/start" class="btn-deploy" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2L2 22h20z"></path>
+      </svg>
+      Deploy
+    </a>
   </div>
 
-  <!-- ============ README CONTENT ============ -->
-  <div class="readme">
+  <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+</nav>
 
-    <h1>📘 lib/database.js — Sequelize Database Connection</h1>
+<div class="overlay" id="overlay"></div>
 
-    <blockquote>
-      <strong>Bot එකේ database connection එක setup කරන module එක.</strong>
-      Sequelize ORM පාවිච්චි කරලා SQLite (local) හෝ Postgres (cloud) database එකකට
-      connect වෙනවා. Singleton pattern එකෙන් එකම connection එක විතරයි හදන්නේ.
-    </blockquote>
+<!-- ============ LAYOUT ============ -->
+<div class="layout" id="top">
 
-    <hr />
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" id="sidebar">
+    <h3>Getting Started</h3>
+    <nav>
+      <a href="#overview">Overview</a>
+      <a href="#quickstart">Quick Start</a>
+      <a href="#install">Installation</a>
+      <a href="#config">Configuration</a>
+    </nav>
 
-    <h2 id="toc">📑 Table of Contents</h2>
-    <ul>
-      <li><a href="#overview">Overview</a></li>
-      <li><a href="#features">Features</a></li>
-      <li><a href="#source">Full Source Code</a></li>
-      <li><a href="#explanation">Line-by-Line Explanation</a></li>
-      <li><a href="#flow">How It Works</a></li>
-      <li><a href="#config">Configuration</a></li>
-      <li><a href="#install">Installation</a></li>
-      <li><a href="#usage">Usage Examples</a></li>
-      <li><a href="#compare">SQLite vs Postgres</a></li>
-      <li><a href="#issues">Common Issues</a></li>
-      <li><a href="#best">Best Practices</a></li>
-    </ul>
+    <h3>Deep Dive</h3>
+    <nav>
+      <a href="#explained">Line-by-Line</a>
+      <a href="#flow">How It Works</a>
+      <a href="#api">API Reference</a>
+    </nav>
 
-    <hr />
+    <h3>Usage</h3>
+    <nav>
+      <a href="#examples">Examples</a>
+      <a href="#compare">SQLite vs Postgres</a>
+    </nav>
 
-    <h2 id="overview">🎯 Overview</h2>
-    <p><code>lib/database.js</code> එක bot එකේ <strong>database layer</strong> එකේ පදනම. මේකෙන්:</p>
-    <ol>
-      <li><strong>Connection එකක් හදනවා</strong> — SQLite හෝ Postgres (env var එකෙන් තීරණය)</li>
-      <li><strong>Singleton pattern</strong> — එකම connection එක විතරයි, memory leak නෑ</li>
-      <li><strong>Tables sync කරනවා</strong> — Models define කරලා තිබ්බොත් auto-create</li>
-      <li><strong>Export කරනවා</strong> — අනිත් files වලට <code>DATABASE</code> object එක දෙනවා</li>
-    </ol>
+    <h3>Help</h3>
+    <nav>
+      <a href="#troubleshoot">Troubleshooting</a>
+      <a href="#faq">FAQ</a>
+      <a href="#deploy">Deploy to Netlify</a>
+    </nav>
+  </aside>
 
-    <h2 id="features">✨ Features</h2>
-    <table>
-      <thead>
-        <tr><th>Feature</th><th>විස්තරය</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>🗄️ Dual database support</td><td>SQLite (local file) සහ Postgres (cloud)</td></tr>
-        <tr><td>🔒 Singleton pattern</td><td>එකම connection instance එක</td></tr>
-        <tr><td>⚙️ Environment-based config</td><td><code>DATABASE_URL</code> env var එකෙන් switch</td></tr>
-        <tr><td>🌐 SSL support</td><td>Cloud DB වලට (Neon, Supabase, Railway)</td></tr>
-        <tr><td>🧹 Silent logging</td><td>Clean console output</td></tr>
-        <tr><td>🔄 Auto-sync</td><td>Tables auto-create</td></tr>
-      </tbody>
-    </table>
+  <!-- ============ MAIN CONTENT ============ -->
+  <main class="main">
+    <div class="content-wrap">
 
-    <h2 id="source">📄 Full Source Code</h2>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="sourceCode">Copy</button>
-<pre><code class="language-javascript" id="sourceCode">const Sequelize = require('sequelize');
+      <!-- HERO -->
+      <header class="hero">
+        <div class="badge">
+          <span class="dot-live"></span>
+          v1.0 · Production Ready
+        </div>
+        <h1>
+          <span class="grad">lib/database.js</span><br />
+          Sequelize Database Connection
+        </h1>
+        <p>
+          Professional documentation for the database layer of a WhatsApp bot.
+          Singleton pattern · SQLite + Postgres support · Netlify deploy ready.
+        </p>
+        <div class="hero-actions">
+          <a href="#quickstart" class="btn btn-primary">
+            Get Started
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <a href="#explained" class="btn btn-secondary">
+            Read the Code
+          </a>
+        </div>
+      </header>
+
+      <!-- ============ OVERVIEW ============ -->
+      <section id="overview">
+        <h2 class="section-heading"><span class="num">1</span>Overview</h2>
+        <p class="section-sub">
+          <code>lib/database.js</code> is the foundation of the bot's database layer.
+          It creates a single, reusable Sequelize connection — SQLite locally, Postgres in production.
+        </p>
+
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-icon">🗄️</div>
+            <div>
+              <strong>Dual Database Support</strong>
+              <span>SQLite for local dev, Postgres for cloud</span>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🔒</div>
+            <div>
+              <strong>Singleton Pattern</strong>
+              <span>One connection, zero memory leaks</span>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">⚙️</div>
+            <div>
+              <strong>Env-Based Config</strong>
+              <span>Switch via <code>DATABASE_URL</code></span>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🌐</div>
+            <div>
+              <strong>SSL Support</strong>
+              <span>Works with Neon, Supabase, Railway</span>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🔄</div>
+            <div>
+              <strong>Auto-Sync</strong>
+              <span>Tables created automatically</span>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🧹</div>
+            <div>
+              <strong>Silent Logging</strong>
+              <span>Clean console output</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ QUICK START ============ -->
+      <section id="quickstart">
+        <h2 class="section-heading"><span class="num">2</span>Quick Start</h2>
+        <p class="section-sub">Get running in under 2 minutes.</p>
+
+        <div class="quick-grid">
+          <div class="quick-card">
+            <div class="quick-step">1</div>
+            <h4>Install packages</h4>
+            <p>Run <code>npm install</code> with the required dependencies.</p>
+          </div>
+          <div class="quick-card">
+            <div class="quick-step">2</div>
+            <h4>Configure .env</h4>
+            <p>Set <code>DATABASE_URL</code> — or leave it out to use SQLite.</p>
+          </div>
+          <div class="quick-card">
+            <div class="quick-step">3</div>
+            <h4>Require & use</h4>
+            <p>Import <code>DATABASE</code> and start writing models.</p>
+          </div>
+        </div>
+
+        <h3 class="subhead">Test your connection</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="qs1">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            Copy
+          </button>
+<pre><code id="qs1">const { DATABASE } = require('./lib/database');
+
+DATABASE.authenticate()
+    .then(() =&gt; console.log('✅ DB connected'))
+    .catch(err =&gt; console.error('❌ DB error:', err));</code></pre>
+        </div>
+      </section>
+
+      <!-- ============ INSTALLATION ============ -->
+      <section id="install">
+        <h2 class="section-heading"><span class="num">3</span>Installation</h2>
+        <p class="section-sub">Choose the dependencies for your stack.</p>
+
+        <h3 class="subhead">SQLite only (development)</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="i1">Copy</button>
+<pre><code id="i1">npm install sequelize sqlite3</code></pre>
+        </div>
+
+        <h3 class="subhead">Postgres (production)</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="i2">Copy</button>
+<pre><code id="i2">npm install sequelize sqlite3 pg pg-hstore</code></pre>
+        </div>
+
+        <h3 class="subhead">Recommended folder structure</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="i3">Copy</button>
+<pre><code id="i3">your-bot/
+├── lib/
+│   └── database.js        ← this file
+├── store.js
+├── index.js
+├── .env
+├── package.json
+└── database.db            ← auto-created (SQLite)</code></pre>
+        </div>
+      </section>
+
+      <!-- ============ CONFIGURATION ============ -->
+      <section id="config">
+        <h2 class="section-heading"><span class="num">4</span>Configuration</h2>
+        <p class="section-sub">
+          All configuration lives in a single environment variable: <code>DATABASE_URL</code>.
+        </p>
+
+        <div class="callout info">
+          <div class="callout-title">ℹ️ How it works</div>
+          <p>If <code>DATABASE_URL</code> is <strong>not set</strong> → SQLite (<code>./database.db</code>).</p>
+          <p>If it <strong>is set</strong> to a Postgres URL → Postgres with SSL.</p>
+        </div>
+
+        <h3 class="subhead">SQLite (development)</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="c-env1">Copy</button>
+<pre><code id="c-env1">DATABASE_URL=./database.db</code></pre>
+        </div>
+
+        <h3 class="subhead">Postgres — Neon</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="c-env2">Copy</button>
+<pre><code id="c-env2">DATABASE_URL=postgres://user:password@ep-xxx.neon.tech/neondb?sslmode=require</code></pre>
+        </div>
+
+        <h3 class="subhead">Postgres — Supabase</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="c-env3">Copy</button>
+<pre><code id="c-env3">DATABASE_URL=postgres://postgres:password@db.xxx.supabase.co:5432/postgres</code></pre>
+        </div>
+
+        <h3 class="subhead">Postgres — Railway</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="c-env4">Copy</button>
+<pre><code id="c-env4">DATABASE_URL=postgresql://postgres:password@containers-us-west-xxx.railway.app:5432/railway</code></pre>
+        </div>
+
+        <h3 class="subhead">Postgres — Local</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="c-env5">Copy</button>
+<pre><code id="c-env5">DATABASE_URL=postgres://postgres:password@localhost:5432/mydb</code></pre>
+        </div>
+      </section>
+
+      <!-- ============ EXPLAINED ============ -->
+      <section id="explained">
+        <h2 class="section-heading"><span class="num">5</span>Line-by-Line Explained</h2>
+        <p class="section-sub">Every line of the source, explained in Sinhala.</p>
+
+        <h3 class="subhead">Full source code</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="full">Copy Full</button>
+<pre><code id="full">const Sequelize = require('sequelize');
 
 class DatabaseManager {
     static instance = null;
@@ -446,92 +1026,89 @@ class DatabaseManager {
 const DATABASE = DatabaseManager.getInstance();
 
 DATABASE.sync()
-    .then(() => {
+    .then(() =&gt; {
         console.log('Database synchronized successfully.');
     })
-    .catch((error) => {
+    .catch((error) =&gt; {
         console.error('Error synchronizing the database:', error);
     });
 
 module.exports = { DATABASE };</code></pre>
-    </div>
+        </div>
 
-    <h2 id="explanation">🔍 Line-by-Line Explanation</h2>
+        <h3 class="subhead">① Import Sequelize</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="e1">Copy</button>
+<pre><code id="e1">const Sequelize = require('sequelize');</code></pre>
+        </div>
+        <p>
+          <code>sequelize</code> npm package එක load කරනවා. Sequelize = <strong>Node.js ORM</strong> එකක් —
+          SQL ලියන්නේ නැතුව JavaScript වලින් database එක handle කරන්න පුළුවන්.
+        </p>
 
-    <h3>1️⃣ Import Sequelize</h3>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="c1">Copy</button>
-<pre><code class="language-javascript" id="c1">const Sequelize = require('sequelize');</code></pre>
-    </div>
-    <p><code>sequelize</code> npm package එක load කරනවා. Sequelize = <strong>Node.js ORM</strong> එකක්.</p>
+        <h3 class="subhead">② Singleton instance</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="e2">Copy</button>
+<pre><code id="e2">static instance = null;</code></pre>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Part</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td><code>static</code></td><td>Class එකට අයිති (instance එකට නෙවෙයි)</td></tr>
+              <tr><td><code>instance</code></td><td>Connection එක තියෙන variable</td></tr>
+              <tr><td><code>= null</code></td><td>මුලින්ම හිස් — connection නෑ</td></tr>
+            </tbody>
+          </table>
+        </div>
 
-    <h3>2️⃣ Class Definition</h3>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="c2">Copy</button>
-<pre><code class="language-javascript" id="c2">class DatabaseManager {
-    // ...
-}</code></pre>
-    </div>
-
-    <h3>3️⃣ Singleton Instance Variable</h3>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="c3">Copy</button>
-<pre><code class="language-javascript" id="c3">static instance = null;</code></pre>
-    </div>
-    <table>
-      <thead><tr><th>කොටස</th><th>තේරුම</th></tr></thead>
-      <tbody>
-        <tr><td><code>static</code></td><td>Class එකට අයිති (instance එකට නෙවෙයි)</td></tr>
-        <tr><td><code>instance</code></td><td>Connection එක තියෙන variable</td></tr>
-        <tr><td><code>= null</code></td><td>මුලින්ම හිස් (connection නෑ)</td></tr>
-      </tbody>
-    </table>
-
-    <h3>4️⃣ Get Instance Method (හදවත ❤️)</h3>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="c4">Copy</button>
-<pre><code class="language-javascript" id="c4">static getInstance() {
+        <h3 class="subhead">③ Get instance method — the heart ❤️</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="e3">Copy</button>
+<pre><code id="e3">static getInstance() {
     if (!DatabaseManager.instance) {
         // ... create connection
     }
     return DatabaseManager.instance;
 }</code></pre>
-    </div>
-    <p><strong>මොකද වෙන්නේ:</strong></p>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="c4b">Copy</button>
-<pre><code class="language-text" id="c4b">Call 1: instance = null  →  !null = true   →  CREATE new connection
-Call 2: instance = conn  →  !conn = false  →  SKIP (return same)
-Call 3: instance = conn  →  !conn = false  →  SKIP (return same)</code></pre>
-    </div>
+        </div>
+        <div class="callout success">
+          <div class="callout-title">✅ Why this matters</div>
+          <p>Call 1: <code>null</code> → CREATE connection</p>
+          <p>Call 2, 3, 4…: returns the <strong>same</strong> connection</p>
+          <p>Result: zero leaks, single DB handle.</p>
+        </div>
 
-    <h3>5️⃣ Environment Variable Check</h3>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="c5">Copy</button>
-<pre><code class="language-javascript" id="c5">const DATABASE_URL = process.env.DATABASE_URL || './database.db';</code></pre>
-    </div>
-    <table>
-      <thead><tr><th>Case</th><th>DATABASE_URL අගය</th><th>Database</th></tr></thead>
-      <tbody>
-        <tr><td>env var set නෑ</td><td><code>./database.db</code></td><td>SQLite</td></tr>
-        <tr><td>env var <code>postgres://...</code></td><td><code>postgres://...</code></td><td>Postgres</td></tr>
-      </tbody>
-    </table>
+        <h3 class="subhead">④ Environment variable check</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="e4">Copy</button>
+<pre><code id="e4">const DATABASE_URL = process.env.DATABASE_URL || './database.db';</code></pre>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Case</th><th>DATABASE_URL</th><th>Database</th></tr></thead>
+            <tbody>
+              <tr><td>env var missing</td><td><code>./database.db</code></td><td>SQLite</td></tr>
+              <tr><td>env var = postgres://…</td><td><code>postgres://…</code></td><td>Postgres</td></tr>
+            </tbody>
+          </table>
+        </div>
 
-    <h3>6️⃣ SQLite Configuration</h3>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="c6">Copy</button>
-<pre><code class="language-javascript" id="c6">new Sequelize({
+        <h3 class="subhead">⑤ SQLite configuration</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="e5">Copy</button>
+<pre><code id="e5">new Sequelize({
     dialect: 'sqlite',
     storage: DATABASE_URL,
     logging: false,
 })</code></pre>
-    </div>
+        </div>
+        <p>SQLite = file-based database. <code>./database.db</code> file එක auto-create වෙනවා. <code>logging: false</code> නිසා console එකේ SQL queries print වෙන්නේ නෑ.</p>
 
-    <h3>7️⃣ Postgres Configuration</h3>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="c7">Copy</button>
-<pre><code class="language-javascript" id="c7">new Sequelize(DATABASE_URL, {
+        <h3 class="subhead">⑥ Postgres configuration</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="e6">Copy</button>
+<pre><code id="e6">new Sequelize(DATABASE_URL, {
     dialect: 'postgres',
     ssl: true,
     protocol: 'postgres',
@@ -541,136 +1118,105 @@ Call 3: instance = conn  →  !conn = false  →  SKIP (return same)</code></pre
     },
     logging: false,
 })</code></pre>
-    </div>
+        </div>
+        <div class="callout warn">
+          <div class="callout-title">⚠️ About rejectUnauthorized: false</div>
+          <p>Neon, Supabase, Railway වගේ cloud DB providers self-signed SSL certificates පාවිච්චි කරනවා. Node.js default reject කරනවා — ඒ නිසා මේක අවශ්‍යයි.</p>
+        </div>
 
-    <h3>8️⃣ Create Singleton Instance</h3>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="c8">Copy</button>
-<pre><code class="language-javascript" id="c8">const DATABASE = DatabaseManager.getInstance();</code></pre>
-    </div>
-
-    <h3>9️⃣ Sync Database</h3>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="c9">Copy</button>
-<pre><code class="language-javascript" id="c9">DATABASE.sync()
-    .then(() => {
+        <h3 class="subhead">⑦ Sync database</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="e7">Copy</button>
+<pre><code id="e7">DATABASE.sync()
+    .then(() =&gt; {
         console.log('Database synchronized successfully.');
     })
-    .catch((error) => {
+    .catch((error) =&gt; {
         console.error('Error synchronizing the database:', error);
     });</code></pre>
-    </div>
+        </div>
+        <div class="callout danger">
+          <div class="callout-title">🚨 Known issue</div>
+          <p><code>sync()</code> is <strong>not awaited</strong>. If queries run before sync finishes → "Table not found" errors.</p>
+          <p><strong>Fix:</strong> call <code>await DATABASE.sync()</code> in your bot's startup.</p>
+        </div>
 
-    <h3>🔟 Export</h3>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="c10">Copy</button>
-<pre><code class="language-javascript" id="c10">module.exports = { DATABASE };</code></pre>
-    </div>
+        <h3 class="subhead">⑧ Export</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="e8">Copy</button>
+<pre><code id="e8">module.exports = { DATABASE };</code></pre>
+        </div>
+        <p>Import කරන විදිය (destructuring):</p>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="e8b">Copy</button>
+<pre><code id="e8b">const { DATABASE } = require('./lib/database');</code></pre>
+        </div>
+      </section>
 
-    <h2 id="flow">🔄 How It Works — Full Flow</h2>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="flowCode">Copy</button>
-<pre><code class="language-text" id="flowCode">Step 1: node index.js
+      <!-- ============ FLOW ============ -->
+      <section id="flow">
+        <h2 class="section-heading"><span class="num">6</span>How It Works</h2>
+        <p class="section-sub">The full execution flow when the bot starts.</p>
+
+        <div class="code-block">
+          <button class="copy-btn" data-copy="flow1">Copy</button>
+<pre><code id="flow1">Step 1: node index.js
     ↓
 Step 2: index.js → require('./lib/database')
     ↓
-Step 3: database.js execute වෙනවා:
-    ├── Sequelize import
-    ├── DatabaseManager class
-    ├── getInstance() call
-    │   ├── instance = null → true
-    │   ├── DATABASE_URL check
-    │   │   ├── env එකේ නෑ → SQLite
-    │   │   └── env එකේ තියෙනවා → Postgres
-    │   └── new Sequelize(...) → connection
+Step 3: database.js executes
+    ├── import Sequelize
+    ├── define DatabaseManager class
+    ├── call getInstance()
+    │   ├── instance = null → CREATE
+    │   ├── read DATABASE_URL
+    │   │   ├── missing → SQLite
+    │   │   └── present → Postgres
+    │   └── new Sequelize(...)
     ├── DATABASE = instance
-    ├── DATABASE.sync() start (async)
+    ├── DATABASE.sync() [async]
     └── module.exports = { DATABASE }
     ↓
 Step 4: index.js → require('./store')
     ↓
 Step 5: store.js → require('./lib/database')
-    └── database.js cache එකේ → instance ✅
-    └── same DATABASE return (singleton)
+    └── cached → same instance ✅
     ↓
 Step 6: Bot ready ✅</code></pre>
-    </div>
+        </div>
+      </section>
 
-    <h2 id="config">⚙️ Configuration</h2>
+      <!-- ============ API REFERENCE ============ -->
+      <section id="api">
+        <h2 class="section-heading"><span class="num">7</span>API Reference</h2>
+        <p class="section-sub">What you can do with the exported <code>DATABASE</code> object.</p>
 
-    <h3>.env File Examples</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Method</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><code>DATABASE.define(name, schema)</code></td><td>Define a model (table)</td></tr>
+              <tr><td><code>DATABASE.sync()</code></td><td>Create/update tables</td></tr>
+              <tr><td><code>DATABASE.sync({ alter: true })</code></td><td>Update schema (dev)</td></tr>
+              <tr><td><code>DATABASE.sync({ force: true })</code></td><td>Drop &amp; recreate ⚠️ data loss</td></tr>
+              <tr><td><code>DATABASE.query('SELECT …')</code></td><td>Run raw SQL</td></tr>
+              <tr><td><code>DATABASE.transaction(fn)</code></td><td>Run inside a transaction</td></tr>
+              <tr><td><code>DATABASE.authenticate()</code></td><td>Test connection</td></tr>
+              <tr><td><code>DATABASE.close()</code></td><td>Close connection</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
 
-    <p><strong>SQLite (Development):</strong></p>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="env1">Copy</button>
-<pre><code class="language-bash" id="env1">DATABASE_URL=./database.db</code></pre>
-    </div>
+      <!-- ============ EXAMPLES ============ -->
+      <section id="examples">
+        <h2 class="section-heading"><span class="num">8</span>Usage Examples</h2>
+        <p class="section-sub">Real-world patterns you'll use every day.</p>
 
-    <p><strong>Postgres — Neon:</strong></p>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="env2">Copy</button>
-<pre><code class="language-bash" id="env2">DATABASE_URL=postgres://user:password@ep-xxx.neon.tech/neondb?sslmode=require</code></pre>
-    </div>
-
-    <p><strong>Postgres — Supabase:</strong></p>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="env3">Copy</button>
-<pre><code class="language-bash" id="env3">DATABASE_URL=postgres://postgres:password@db.xxx.supabase.co:5432/postgres</code></pre>
-    </div>
-
-    <p><strong>Postgres — Railway:</strong></p>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="env4">Copy</button>
-<pre><code class="language-bash" id="env4">DATABASE_URL=postgresql://postgres:password@containers-us-west-xxx.railway.app:5432/railway</code></pre>
-    </div>
-
-    <p><strong>Postgres — Local:</strong></p>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="env5">Copy</button>
-<pre><code class="language-bash" id="env5">DATABASE_URL=postgres://postgres:password@localhost:5432/mydb</code></pre>
-    </div>
-
-    <h2 id="install">📦 Installation</h2>
-
-    <p><strong>1. Install dependencies</strong></p>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="inst1">Copy</button>
-<pre><code class="language-bash" id="inst1"># SQLite විතරයි ඕනේ නම්:
-npm install sequelize sqlite3
-
-# Postgres ඕනේ නම්:
-npm install sequelize sqlite3 pg pg-hstore</code></pre>
-    </div>
-
-    <p><strong>2. Folder structure</strong></p>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="inst2">Copy</button>
-<pre><code class="language-text" id="inst2">your-bot/
-├── lib/
-│   └── database.js        ← මේ file එක
-├── store.js
-├── index.js
-├── .env
-├── package.json
-└── database.db            ← auto-create (SQLite)</code></pre>
-    </div>
-
-    <p><strong>3. Test connection</strong></p>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="inst3">Copy</button>
-<pre><code class="language-javascript" id="inst3">const { DATABASE } = require('./lib/database');
-
-DATABASE.authenticate()
-    .then(() => console.log('✅ DB connected'))
-    .catch(err => console.error('❌ DB error:', err));</code></pre>
-    </div>
-
-    <h2 id="usage">💡 Usage Examples</h2>
-
-    <h3>Example 1 — Model Define කරනවා</h3>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="u1">Copy</button>
-<pre><code class="language-javascript" id="u1">const { DATABASE } = require('../lib/database');
+        <h3 class="subhead">1. Define a model</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="u1">Copy</button>
+<pre><code id="u1">const { DATABASE } = require('../lib/database');
 const { DataTypes } = require('sequelize');
 
 const Contact = DATABASE.define('Contact', {
@@ -679,202 +1225,429 @@ const Contact = DATABASE.define('Contact', {
 });
 
 module.exports = Contact;</code></pre>
-    </div>
+        </div>
 
-    <h3>Example 2 — Data Save කරනවා</h3>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="u2">Copy</button>
-<pre><code class="language-javascript" id="u2">async function saveContact(jid, name) {
-    await Contact.upsert({ jid, name });
-}</code></pre>
-    </div>
+        <h3 class="subhead">2. Save / load data</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="u2">Copy</button>
+<pre><code id="u2">// Save
+await Contact.upsert({ jid, name });
 
-    <h3>Example 3 — Data ගන්නවා</h3>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="u3">Copy</button>
-<pre><code class="language-javascript" id="u3">async function getName(jid) {
-    const contact = await Contact.findOne({ where: { jid } });
-    return contact ? contact.name : jid.split('@')[0];
-}</code></pre>
-    </div>
+// Load
+const contact = await Contact.findOne({ where: { jid } });
+const name = contact ? contact.name : jid.split('@')[0];</code></pre>
+        </div>
 
-    <h3>Example 4 — Transaction</h3>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="u4">Copy</button>
-<pre><code class="language-javascript" id="u4">return await DATABASE.transaction(async (t) => {
-    await Message.create({ jid: from, ...message }, { transaction: t });
-    await Message.create({ jid: to,   ...message }, { transaction: t });
+        <h3 class="subhead">3. Transaction</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="u3">Copy</button>
+<pre><code id="u3">return await DATABASE.transaction(async (t) =&gt; {
+    await Message.create({ jid: from, ...msg }, { transaction: t });
+    await Message.create({ jid: to,   ...msg }, { transaction: t });
 });</code></pre>
-    </div>
+        </div>
 
-    <h3>Example 5 — Await Sync (recommended)</h3>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="u5">Copy</button>
-<pre><code class="language-javascript" id="u5">async function main() {
+        <h3 class="subhead">4. Startup with proper sync</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="u4">Copy</button>
+<pre><code id="u4">async function startBot() {
     const { DATABASE } = require('./lib/database');
     await DATABASE.sync();
-    console.log('Database ready ✅');
-    await startBot();
+    console.log('DB ready ✅');
+    await startWhatsApp();
 }
-main().catch(console.error);</code></pre>
+
+startBot().catch(console.error);</code></pre>
+        </div>
+      </section>
+
+      <!-- ============ COMPARE ============ -->
+      <section id="compare">
+        <h2 class="section-heading"><span class="num">9</span>SQLite vs Postgres</h2>
+        <p class="section-sub">Which one should you use?</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Feature</th><th>SQLite</th><th>Postgres</th></tr></thead>
+            <tbody>
+              <tr><td>Setup</td><td>✅ Easy (file)</td><td>⚠️ Server required</td></tr>
+              <tr><td>Speed (small)</td><td>✅ Fast</td><td>✅ Fast</td></tr>
+              <tr><td>Speed (large)</td><td>❌ Slow</td><td>✅ Fast</td></tr>
+              <tr><td>Concurrent writes</td><td>❌ Weak</td><td>✅ Strong</td></tr>
+              <tr><td>Backup</td><td>✅ File copy</td><td>⚠️ pg_dump</td></tr>
+              <tr><td>Cost</td><td>✅ Free</td><td>Free tier / paid</td></tr>
+              <tr><td>Best for</td><td>Development</td><td>Production</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout success">
+          <div class="callout-title">🎯 Recommendation</div>
+          <p><strong>Development / personal bot</strong> → SQLite</p>
+          <p><strong>Production / many users</strong> → Postgres</p>
+        </div>
+      </section>
+
+      <!-- ============ TROUBLESHOOTING ============ -->
+      <section id="troubleshoot">
+        <h2 class="section-heading"><span class="num">10</span>Troubleshooting</h2>
+        <p class="section-sub">Common errors and their fixes.</p>
+
+        <h3 class="subhead">Please install sqlite3 package manually</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="t1">Copy</button>
+<pre><code id="t1">npm install sqlite3</code></pre>
+        </div>
+
+        <h3 class="subhead">Cannot find module 'pg'</h3>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="t2">Copy</button>
+<pre><code id="t2">npm install pg pg-hstore</code></pre>
+        </div>
+
+        <h3 class="subhead">Table doesn't exist</h3>
+        <p><strong>Cause:</strong> <code>sync()</code> was not awaited.</p>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="t3">Copy</button>
+<pre><code id="t3">await DATABASE.sync();
+// then run your queries</code></pre>
+        </div>
+
+        <h3 class="subhead">SQLITE_BUSY: database is locked</h3>
+        <p><strong>Cause:</strong> Multiple connections or concurrent writes. Use the singleton (this file) or migrate to Postgres.</p>
+
+        <h3 class="subhead">Self signed certificate error</h3>
+        <p><strong>Fix:</strong> Ensure <code>ssl: { require: true, rejectUnauthorized: false }</code> in dialectOptions.</p>
+      </section>
+
+      <!-- ============ FAQ ============ -->
+      <section id="faq">
+        <h2 class="section-heading"><span class="num">11</span>FAQ</h2>
+
+        <h3 class="subhead">Can I use MySQL instead?</h3>
+        <p>Yes — change <code>dialect: 'postgres'</code> to <code>'mysql'</code> and install <code>mysql2</code>. The rest of the file works unchanged.</p>
+
+        <h3 class="subhead">Why use a singleton?</h3>
+        <p>Without it, each <code>require()</code> would create a new DB connection. With 10 files importing this, you'd have 10 connections — memory leak + SQLite lock errors. The singleton guarantees one shared instance.</p>
+
+        <h3 class="subhead">Should I commit database.db to git?</h3>
+        <p>No. Add it to <code>.gitignore</code> — databases contain user data and should never be in version control.</p>
+
+        <h3 class="subhead">Does this work with Netlify?</h3>
+        <p>This particular file is a Node.js module and does not run on Netlify's static hosting — it runs on your bot's server. But this documentation site itself is fully Netlify-ready (see next section).</p>
+      </section>
+
+      <!-- ============ DEPLOY ============ -->
+      <section id="deploy">
+        <h2 class="section-heading"><span class="num">12</span>Deploy to Netlify</h2>
+        <p class="section-sub">Ship this documentation site in under a minute.</p>
+
+        <h3 class="subhead">Option A — Drag &amp; drop</h3>
+        <ol>
+          <li>Save this file as <code>index.html</code> in a folder.</li>
+          <li>Go to <a href="https://app.netlify.com/drop" target="_blank" rel="noopener">app.netlify.com/drop</a>.</li>
+          <li>Drag the folder into the drop zone.</li>
+          <li>Netlify generates a live URL instantly. 🎉</li>
+        </ol>
+
+        <h3 class="subhead">Option B — Connect a Git repo</h3>
+        <ol>
+          <li>Push your folder to GitHub.</li>
+          <li>In Netlify: <strong>Add new site → Import from Git</strong>.</li>
+          <li>Select the repo. No build command needed (static HTML).</li>
+          <li>Publish directory: <code>/</code> (root).</li>
+          <li>Click <strong>Deploy</strong>.</li>
+        </ol>
+
+        <div class="callout info">
+          <div class="callout-title">📁 Optional: netlify.toml</div>
+          <p>Drop this file in your project root for production-grade headers and redirects.</p>
+        </div>
+
+        <div class="code-block">
+          <button class="copy-btn" data-copy="netlify">Copy netlify.toml</button>
+<pre><code id="netlify">[build]
+  publish = "."
+  command = ""
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200</code></pre>
+        </div>
+      </section>
+
+      <!-- ============ FOOTER ============ -->
+      <footer class="footer">
+        <div class="footer-grid">
+          <div>
+            <div class="footer-brand">PathumTech Docs</div>
+            <p class="footer-desc">
+              Professional documentation site for the <code>lib/database.js</code>
+              module. Built for WhatsApp bot developers. Deployed on Netlify.
+            </p>
+          </div>
+          <div>
+            <h5>Docs</h5>
+            <ul>
+              <li><a href="#quickstart">Quick Start</a></li>
+              <li><a href="#explained">Explained</a></li>
+              <li><a href="#examples">Examples</a></li>
+            </ul>
+          </div>
+          <div>
+            <h5>Help</h5>
+            <ul>
+              <li><a href="#troubleshoot">Troubleshooting</a></li>
+              <li><a href="#faq">FAQ</a></li>
+              <li><a href="#deploy">Deploy</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          📚 README — <code>lib/database.js</code> · PathumTech bot project · © 2025
+        </div>
+      </footer>
+
     </div>
-
-    <h2 id="compare">📊 Comparison: SQLite vs Postgres</h2>
-    <table>
-      <thead>
-        <tr><th>Feature</th><th>SQLite</th><th>Postgres</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>Setup</td><td>✅ ලේසි (file)</td><td>⚠️ Server ඕනේ</td></tr>
-        <tr><td>Speed (small data)</td><td>✅ Fast</td><td>✅ Fast</td></tr>
-        <tr><td>Speed (large data)</td><td>❌ Slow</td><td>✅ Fast</td></tr>
-        <tr><td>Concurrent writes</td><td>❌ Weak</td><td>✅ Strong</td></tr>
-        <tr><td>Backup</td><td>✅ File copy</td><td>⚠️ pg_dump</td></tr>
-        <tr><td>Cost</td><td>✅ Free</td><td>Free tier / Paid</td></tr>
-      </tbody>
-    </table>
-
-    <h2 id="issues">🐛 Common Issues & Fixes</h2>
-
-    <h3>❌ Issue 1: Please install sqlite3 package manually</h3>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="i1">Copy</button>
-<pre><code class="language-bash" id="i1">npm install sqlite3</code></pre>
-    </div>
-
-    <h3>❌ Issue 2: Cannot find module 'pg'</h3>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="i2">Copy</button>
-<pre><code class="language-bash" id="i2">npm install pg pg-hstore</code></pre>
-    </div>
-
-    <h3>❌ Issue 3: Table doesn't exist</h3>
-    <p><strong>හේතුව:</strong> <code>sync()</code> await කරලා නෑ</p>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="i3">Copy</button>
-<pre><code class="language-javascript" id="i3">await DATABASE.sync();
-// ඊට පස්සේ queries</code></pre>
-    </div>
-
-    <h2 id="best">✅ Best Practices</h2>
-
-    <h3>1. sync() await කරන්න</h3>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="b1">Copy</button>
-<pre><code class="language-javascript" id="b1">// ❌
-DATABASE.sync();
-
-// ✅
-await DATABASE.sync();</code></pre>
-    </div>
-
-    <h3>2. Absolute path පාවිච්චි කරන්න</h3>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="b2">Copy</button>
-<pre><code class="language-javascript" id="b2">// ❌
-storage: './database.db'
-
-// ✅
-const path = require('path');
-storage: path.join(process.cwd(), 'database.db')</code></pre>
-    </div>
-
-    <h3>3. .gitignore එකට add කරන්න</h3>
-    <div class="code-block">
-      <button class="copy-mini" data-copy="b3">Copy</button>
-<pre><code class="language-gitignore" id="b3">database.db
-database.db-journal
-.env
-node_modules/</code></pre>
-    </div>
-
-    <hr />
-
-    <h2>📋 Summary</h2>
-    <blockquote>
-      <code>lib/database.js</code> එක Sequelize database connection එකේ <strong>singleton factory</strong> එකක්.
-      <code>DATABASE_URL</code> env var එකේ තියෙන අගය අනුව SQLite හෝ Postgres එකට connect වෙනවා.
-      <code>getInstance()</code> method එකෙන් එකම connection එක විතරයි හදන්නේ.
-      <code>DATABASE.sync()</code> tables auto-create කරනවා.
-      Export කරන <code>DATABASE</code> object එකෙන් models define කරන්න, queries දාන්න,
-      transactions කරන්න පුළුවන්.
-    </blockquote>
-
-    <hr />
-
-    <p style="text-align:center; color:#8b949e; font-size:13px;">
-      📚 README — <code>lib/database.js</code> · JawadTechX bot project
-    </p>
-
-  </div>
+  </main>
 </div>
 
-<!-- Toast -->
-<div class="toast" id="toast">✅ Copied to clipboard!</div>
+<!-- ============ BACK TO TOP ============ -->
+<button class="back-to-top" id="backTop" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="18 15 12 9 6 15"></polyline>
+  </svg>
+</button>
+
+<!-- ============ TOAST ============ -->
+<div class="toast" id="toast">✅ Copied!</div>
 
 <script>
-  // Syntax highlight
-  hljs.highlightAll();
+(function () {
+  'use strict';
 
-  const toast = document.getElementById('toast');
-
+  /* ============ TOAST ============ */
+  var toast = document.getElementById('toast');
   function showToast(msg) {
-    toast.textContent = msg || '✅ Copied to clipboard!';
+    toast.textContent = msg || '✅ Copied!';
     toast.classList.add('show');
-    clearTimeout(toast._t);
-    toast._t = setTimeout(() => toast.classList.remove('show'), 2000);
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(function () { toast.classList.remove('show'); }, 1800);
   }
 
-  async function copyText(text) {
+  /* ============ COPY ============ */
+  function copyToClipboard(text) {
+    return new Promise(function (resolve) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text)
+          .then(function () { resolve(true); })
+          .catch(function () { resolve(fallbackCopy(text)); });
+      } else {
+        resolve(fallbackCopy(text));
+      }
+    });
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.top = '-9999px';
+    ta.style.left = '-9999px';
+    ta.setAttribute('readonly', '');
+    document.body.appendChild(ta);
+    var ok = false;
     try {
-      await navigator.clipboard.writeText(text);
-      return true;
-    } catch {
-      const ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position = 'fixed';
-      ta.style.opacity = '0';
-      document.body.appendChild(ta);
       ta.select();
-      try { document.execCommand('copy'); } catch {}
-      document.body.removeChild(ta);
-      return true;
+      ta.setSelectionRange(0, text.length);
+      ok = document.execCommand('copy');
+    } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  }
+
+  /* ============ SYNTAX HIGHLIGHTER ============ */
+  function escapeHtml(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  var KEYWORDS = [
+    'const','let','var','class','static','new','if','else','return',
+    'async','await','function','try','catch','throw','typeof','instanceof',
+    'this','true','false','null','undefined','import','from','export','default'
+  ];
+
+  function highlight(code) {
+    var out = '', i = 0, n = code.length;
+
+    while (i < n) {
+      var ch = code[i], next = code[i + 1];
+
+      if (ch === '/' && next === '/') {
+        var endC = code.indexOf('\n', i);
+        if (endC === -1) endC = n;
+        out += '<span class="c">' + escapeHtml(code.slice(i, endC)) + '</span>';
+        i = endC;
+        continue;
+      }
+
+      if (ch === '"' || ch === "'" || ch === '`') {
+        var quote = ch, endS = i + 1;
+        while (endS < n && code[endS] !== quote) {
+          if (code[endS] === '\\') endS++;
+          endS++;
+        }
+        endS = Math.min(endS + 1, n);
+        out += '<span class="s">' + escapeHtml(code.slice(i, endS)) + '</span>';
+        i = endS;
+        continue;
+      }
+
+      if (/[a-zA-Z_$]/.test(ch)) {
+        var endW = i;
+        while (endW < n && /[a-zA-Z0-9_$]/.test(code[endW])) endW++;
+        var word = code.slice(i, endW);
+        if (KEYWORDS.indexOf(word) !== -1) {
+          out += '<span class="k">' + word + '</span>';
+        } else {
+          out += escapeHtml(word);
+        }
+        i = endW;
+        continue;
+      }
+
+      if (/[0-9]/.test(ch)) {
+        var endN = i;
+        while (endN < n && /[0-9.]/.test(code[endN])) endN++;
+        out += '<span class="n">' + escapeHtml(code.slice(i, endN)) + '</span>';
+        i = endN;
+        continue;
+      }
+
+      out += escapeHtml(ch);
+      i++;
+    }
+    return out;
+  }
+
+  function applyHighlight() {
+    var blocks = document.querySelectorAll('pre code[id]');
+    for (var j = 0; j < blocks.length; j++) {
+      var el = blocks[j];
+      var raw = el.textContent;
+      try { el.innerHTML = highlight(raw); }
+      catch (e) { el.textContent = raw; }
     }
   }
 
-  // Main copy button
-  const copyMainBtn = document.getElementById('copyMainBtn');
-  const mainBtnText = document.getElementById('mainBtnText');
-  const mainCode = document.getElementById('mainCode');
+  /* ============ WIRE COPY BUTTONS ============ */
+  function wireCopyButtons() {
+    var btns = document.querySelectorAll('.copy-btn[data-copy]');
+    for (var k = 0; k < btns.length; k++) {
+      (function (btn) {
+        btn.addEventListener('click', function () {
+          var id = btn.getAttribute('data-copy');
+          var el = document.getElementById(id);
+          if (!el) { showToast('❌ Target missing'); return; }
 
-  copyMainBtn.addEventListener('click', async () => {
-    await copyText(mainCode.textContent);
-    copyMainBtn.classList.add('copied');
-    mainBtnText.textContent = 'Copied!';
-    showToast('✅ Full database.js copied!');
-    setTimeout(() => {
-      copyMainBtn.classList.remove('copied');
-      mainBtnText.textContent = 'Copy Full Code';
-    }, 2000);
-  });
+          copyToClipboard(el.textContent).then(function (ok) {
+            if (!ok) { showToast('❌ Copy failed'); return; }
+            var orig = btn.innerHTML;
+            btn.classList.add('copied');
+            btn.innerHTML = '✅ Copied';
+            showToast('✅ Code copied!');
+            setTimeout(function () {
+              btn.classList.remove('copied');
+              btn.innerHTML = orig;
+            }, 1600);
+          });
+        });
+      })(btns[k]);
+    }
+  }
 
-  // All mini copy buttons
-  document.querySelectorAll('.copy-mini').forEach((btn) => {
-    btn.addEventListener('click', async () => {
-      const id = btn.getAttribute('data-copy');
-      const el = document.getElementById(id);
-      if (!el) return;
-      await copyText(el.textContent);
-      const orig = btn.textContent;
-      btn.classList.add('copied');
-      btn.textContent = '✅ Copied';
-      showToast('✅ Copied!');
-      setTimeout(() => {
-        btn.classList.remove('copied');
-        btn.textContent = orig;
-      }, 1500);
+  /* ============ ACTIVE SECTION TRACKING ============ */
+  function wireActiveTracking() {
+    var sections = document.querySelectorAll('section[id]');
+    var links = document.querySelectorAll('.sidebar nav a');
+
+    if (!('IntersectionObserver' in window)) return;
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var id = entry.target.id;
+          links.forEach(function (l) {
+            l.classList.toggle('active', l.getAttribute('href') === '#' + id);
+          });
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+
+    sections.forEach(function (s) { observer.observe(s); });
+  }
+
+  /* ============ MOBILE MENU ============ */
+  function wireMobileMenu() {
+    var toggle = document.getElementById('menuToggle');
+    var sidebar = document.getElementById('sidebar');
+    var overlay = document.getElementById('overlay');
+
+    function close() {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('visible');
+    }
+
+    toggle.addEventListener('click', function () {
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('visible');
     });
-  });
+
+    overlay.addEventListener('click', close);
+
+    // close on link click
+    sidebar.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        if (window.innerWidth <= 900) close();
+      });
+    });
+  }
+
+  /* ============ BACK TO TOP ============ */
+  function wireBackTop() {
+    var btn = document.getElementById('backTop');
+    window.addEventListener('scroll', function () {
+      btn.classList.toggle('visible', window.scrollY > 400);
+    });
+    btn.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  /* ============ INIT ============ */
+  function init() {
+    applyHighlight();
+    wireCopyButtons();
+    wireActiveTracking();
+    wireMobileMenu();
+    wireBackTop();
+    console.log('✅ PathumTech Docs ready');
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
 </script>
 
 </body>
