@@ -3,778 +3,253 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="PathumTech Docs — lib/database.js සිංහල පැහැදිලි කිරීම සහිත සම්පූර්ණ documentation." />
 <meta name="theme-color" content="#ffffff" />
-<title>PathumTech Docs — lib/database.js</title>
+<title>PathumTech Docs — lib Modules</title>
 
 <style>
-  /* ============ RESET ============ */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --bg:         #ffffff;
-    --bg-soft:    #f8fafc;
-    --bg-soft-2:  #f1f5f9;
-    --border:     #e2e8f0;
-    --border-2:   #cbd5e1;
-    --text:       #0f172a;
-    --text-hi:    #020617;
-    --text-mid:   #475569;
-    --text-mute:  #94a3b8;
-    --accent:     #2563eb;
-    --accent-2:   #3b82f6;
-    --accent-bg:  #eff6ff;
-    --green:      #059669;
-    --green-bg:   #ecfdf5;
-    --red:        #dc2626;
-    --red-bg:     #fef2f2;
-    --yellow:     #d97706;
-    --yellow-bg:  #fffbeb;
-    --purple:     #7c3aed;
-    --purple-bg:  #f5f3ff;
-
-    /* Dark code blocks stay dark for contrast */
-    --code-bg:    #1e293b;
-    --code-header:#0f172a;
-    --code-text:  #e2e8f0;
-    --code-k:     #f472b6;
-    --code-s:     #7dd3fc;
-    --code-c:     #64748b;
-    --code-n:     #fbbf24;
-
-    --nav-h: 64px;
-    --side-w: 270px;
-    --radius: 12px;
-    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans Sinhala', 'Iskoola Pota', Arial, sans-serif;
-    --mono: 'SF Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+    --bg:#fff; --bg-soft:#f8fafc; --bg-soft-2:#f1f5f9;
+    --border:#e2e8f0; --border-2:#cbd5e1;
+    --text:#0f172a; --text-hi:#020617; --text-mid:#475569; --text-mute:#94a3b8;
+    --accent:#2563eb; --accent-2:#3b82f6; --accent-bg:#eff6ff;
+    --green:#059669; --green-bg:#ecfdf5;
+    --emerald:#10b981; --emerald-bg:#ecfdf5;
+    --cyan:#0891b2; --cyan-bg:#ecfeff;
+    --lime:#65a30d; --lime-bg:#f7fee7;
+    --red:#dc2626; --red-bg:#fef2f2;
+    --yellow:#d97706; --yellow-bg:#fffbeb;
+    --purple:#7c3aed; --purple-bg:#f5f3ff;
+    --teal:#0d9488; --teal-bg:#f0fdfa;
+    --amber:#d97706; --amber-bg:#fffbeb;
+    --pink:#db2777; --pink-bg:#fdf2f8;
+    --indigo:#4f46e5; --indigo-bg:#eef2ff;
+    --code-bg:#1e293b; --code-header:#0f172a; --code-text:#e2e8f0;
+    --code-k:#f472b6; --code-s:#7dd3fc; --code-c:#64748b; --code-n:#fbbf24;
+    --nav-h:64px; --side-w:280px; --radius:12px;
+    --font:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Noto Sans Sinhala','Iskoola Pota',Arial,sans-serif;
+    --mono:'SF Mono','Consolas','Monaco','Courier New',monospace;
   }
-
   html { scroll-behavior: smooth; scroll-padding-top: calc(var(--nav-h) + 20px); }
-
-  body {
-    font-family: var(--font);
-    background: var(--bg-soft);
-    color: var(--text);
-    line-height: 1.75;
-    font-size: 15.5px;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  a { color: var(--accent); text-decoration: none; }
-  a:hover { text-decoration: underline; }
+  body { font-family: var(--font); background: var(--bg-soft); color: var(--text); line-height: 1.75; font-size: 15.5px; -webkit-font-smoothing: antialiased; }
+  a { color: var(--accent); text-decoration: none; } a:hover { text-decoration: underline; }
   code { font-family: var(--mono); }
 
-  /* ============ TOP NAV ============ */
-  .nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: var(--nav-h);
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    padding: 0 24px;
-    z-index: 100;
-    gap: 20px;
-  }
-
-  .nav-logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
-    flex-shrink: 0;
-  }
+  .nav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); background: rgba(255,255,255,.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); display: flex; align-items: center; padding: 0 24px; z-index: 100; gap: 20px; }
+  .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; flex-shrink: 0; }
   .nav-logo:hover { text-decoration: none; }
+  .logo-mark { width: 40px; height: 40px; background: linear-gradient(135deg, #dbeafe, #bfdbfe); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 2px 8px rgba(37,99,235,.15); }
+  .logo-text { font-weight: 800; color: var(--text-hi); font-size: 17px; letter-spacing: -.3px; line-height: 1.1; }
+  .logo-text small { display: block; font-size: 10px; font-weight: 600; color: var(--text-mute); text-transform: uppercase; letter-spacing: 1.4px; margin-top: 2px; }
+  .nav-links { display: flex; gap: 4px; margin-left: auto; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+  .nav-links a { padding: 6px 10px; border-radius: 8px; color: var(--text-mid); font-size: 12px; font-weight: 500; transition: .2s; }
+  .nav-links a:hover { background: var(--bg-soft-2); color: var(--text-hi); text-decoration: none; }
+  .menu-toggle { display: none; background: none; border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 18px; line-height: 1; margin-left: auto; }
 
-  .logo-mark {
-    width: 40px; height: 40px;
-    background: linear-gradient(135deg, #dbeafe, #bfdbfe);
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px;
-    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
-  }
+  .layout { display: flex; padding-top: var(--nav-h); min-height: 100vh; }
 
-  .logo-text {
-    font-weight: 800;
-    color: var(--text-hi);
-    font-size: 17px;
-    letter-spacing: -0.3px;
-    line-height: 1.1;
-  }
-  .logo-text small {
-    display: block;
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--text-mute);
-    text-transform: uppercase;
-    letter-spacing: 1.4px;
-    margin-top: 2px;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 4px;
-    margin-left: auto;
-    align-items: center;
-  }
-  .nav-links a {
-    padding: 8px 14px;
-    border-radius: 8px;
-    color: var(--text-mid);
-    font-size: 14px;
-    font-weight: 500;
-    transition: 0.2s;
-  }
-  .nav-links a:hover {
-    background: var(--bg-soft-2);
-    color: var(--text-hi);
-    text-decoration: none;
-  }
-
-  .menu-toggle {
-    display: none;
-    background: none;
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 8px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 18px;
-    line-height: 1;
-    margin-left: auto;
-  }
-
-  /* ============ LAYOUT ============ */
-  .layout {
-    display: flex;
-    padding-top: var(--nav-h);
-    min-height: 100vh;
-  }
-
-  /* ============ SIDEBAR ============ */
-  .sidebar {
-    width: var(--side-w);
-    position: fixed;
-    top: var(--nav-h);
-    left: 0;
-    bottom: 0;
-    overflow-y: auto;
-    background: var(--bg);
-    border-right: 1px solid var(--border);
-    padding: 24px 14px 40px;
-    transition: transform 0.3s ease;
-    z-index: 50;
-  }
-
-  .sidebar h3 {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 1.3px;
-    color: var(--text-mute);
-    margin: 24px 0 10px 10px;
-    font-weight: 700;
-  }
+  .sidebar { width: var(--side-w); position: fixed; top: var(--nav-h); left: 0; bottom: 0; overflow-y: auto; background: var(--bg); border-right: 1px solid var(--border); padding: 24px 14px 40px; transition: transform .3s ease; z-index: 50; }
+  .sidebar h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 1.3px; color: var(--text-mute); margin: 24px 0 10px 10px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
   .sidebar h3:first-child { margin-top: 0; }
+  .sidebar h3 .mod-tag { padding: 1px 6px; border-radius: 4px; font-size: 9px; letter-spacing: .5px; }
+  .mt1{background:var(--accent-bg);color:var(--accent);}
+  .mt2{background:var(--purple-bg);color:var(--purple);}
+  .mt3{background:var(--teal-bg);color:var(--teal);}
+  .mt4{background:var(--amber-bg);color:var(--amber);}
+  .mt5{background:var(--pink-bg);color:var(--pink);}
+  .mt6{background:var(--red-bg);color:var(--red);}
+  .mt7{background:var(--indigo-bg);color:var(--indigo);}
+  .mt8{background:var(--emerald-bg);color:var(--emerald);}
+  .mt9{background:var(--cyan-bg);color:var(--cyan);}
+  .mt10{background:var(--lime-bg);color:var(--lime);}
 
-  .sidebar nav a {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 12px;
-    border-radius: 8px;
-    color: var(--text-mid);
-    font-size: 14px;
-    margin-bottom: 2px;
-    transition: 0.15s;
-    text-decoration: none;
-    font-weight: 500;
-  }
-  .sidebar nav a .sb-emoji {
-    font-size: 16px;
-    flex-shrink: 0;
-    width: 20px;
-    text-align: center;
-  }
-  .sidebar nav a:hover {
-    background: var(--bg-soft);
-    color: var(--text-hi);
-    text-decoration: none;
-  }
-  .sidebar nav a.active {
-    background: var(--accent-bg);
-    color: var(--accent);
-    font-weight: 700;
-  }
+  .sidebar nav a { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 8px; color: var(--text-mid); font-size: 14px; margin-bottom: 2px; transition: .15s; text-decoration: none; font-weight: 500; }
+  .sidebar nav a .sb-emoji { font-size: 16px; flex-shrink: 0; width: 20px; text-align: center; }
+  .sidebar nav a:hover { background: var(--bg-soft); color: var(--text-hi); text-decoration: none; }
+  .sidebar nav a.active { background: var(--accent-bg); color: var(--accent); font-weight: 700; }
+  .sidebar nav a.newest-link::after { content: "NEW"; font-size: 9px; background: var(--lime); color: #fff; padding: 1px 5px; border-radius: 4px; margin-left: auto; font-weight: 800; letter-spacing: .5px; }
 
-  /* ============ MAIN ============ */
-  .main {
-    flex: 1;
-    margin-left: var(--side-w);
-    padding: 40px 56px 80px;
-    max-width: 100%;
-    min-width: 0;
-  }
+  .main { flex: 1; margin-left: var(--side-w); padding: 40px 56px 80px; max-width: 100%; min-width: 0; }
   .content-wrap { max-width: 900px; margin: 0 auto; }
 
-  /* ============ HERO ============ */
-  .hero {
-    padding: 20px 0 44px;
-    margin-bottom: 40px;
-    border-bottom: 1px solid var(--border);
-  }
+  .hero { padding: 20px 0 44px; margin-bottom: 40px; border-bottom: 1px solid var(--border); }
+  .badge { display: inline-flex; align-items: center; gap: 8px; background: var(--green-bg); border: 1px solid #a7f3d0; padding: 6px 14px; border-radius: 20px; font-size: 12.5px; font-weight: 700; color: var(--green); margin-bottom: 18px; }
+  .badge .dot-live { width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px rgba(5,150,105,.15); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.5;} }
+  .hero-title-wrap { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 18px; }
+  .hero-big-emoji { font-size: 56px; line-height: 1; filter: drop-shadow(0 4px 12px rgba(37,99,235,.2)); }
+  .hero h1 { font-size: 40px; font-weight: 800; letter-spacing: -1px; color: var(--text-hi); line-height: 1.15; margin: 0; }
+  .hero h1 .grad { background: linear-gradient(135deg, #2563eb, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero-desc { font-size: 16.5px; color: var(--text-mid); max-width: 680px; margin-bottom: 10px; }
+  .hero-desc-si { font-size: 15.5px; color: var(--text-mid); max-width: 680px; margin-bottom: 24px; padding: 14px 18px; background: var(--bg-soft); border-left: 4px solid var(--accent); border-radius: 0 10px 10px 0; }
+  .hero-modules { display: grid; grid-template-columns: repeat(auto-fit, minmax(125px, 1fr)); gap: 8px; margin-bottom: 24px; }
+  .module-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; display: flex; align-items: center; gap: 8px; transition: .2s; text-decoration: none; color: inherit; }
+  .module-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37,99,235,.1); text-decoration: none; }
+  .module-card .m-icon { width: 32px; height: 32px; background: var(--accent-bg); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .module-card.purple .m-icon { background: var(--purple-bg); }
+  .module-card.teal .m-icon { background: var(--teal-bg); }
+  .module-card.amber .m-icon { background: var(--amber-bg); }
+  .module-card.pink .m-icon { background: var(--pink-bg); }
+  .module-card.red .m-icon { background: var(--red-bg); }
+  .module-card.indigo .m-icon { background: var(--indigo-bg); }
+  .module-card.emerald .m-icon { background: var(--emerald-bg); }
+  .module-card.cyan .m-icon { background: var(--cyan-bg); }
+  .module-card.lime .m-icon { background: var(--lime-bg); }
+  .module-card .m-info { line-height: 1.3; min-width: 0; }
+  .module-card .m-title { font-weight: 800; color: var(--text-hi); font-size: 10.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .module-card .m-sub { font-size: 9px; color: var(--text-mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--green-bg);
-    border: 1px solid #a7f3d0;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 12.5px;
-    font-weight: 700;
-    color: var(--green);
-    margin-bottom: 18px;
-  }
-  .badge .dot-live {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.15);
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-  }
+  .hero-actions { display: flex; gap: 5px; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 5px; padding: 8px 12px; border-radius: 10px; font-size: 11.5px; font-weight: 600; transition: .2s; border: 1px solid transparent; cursor: pointer; font-family: inherit; text-decoration: none; }
+  .btn:hover { text-decoration: none; transform: translateY(-1px); }
+  .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 4px 14px rgba(37,99,235,.25); }
+  .btn-purple { background: var(--purple); color: #fff; }
+  .btn-teal { background: var(--teal); color: #fff; }
+  .btn-amber { background: var(--amber); color: #fff; }
+  .btn-pink { background: var(--pink); color: #fff; }
+  .btn-red { background: var(--red); color: #fff; }
+  .btn-indigo { background: var(--indigo); color: #fff; }
+  .btn-emerald { background: var(--emerald); color: #fff; }
+  .btn-cyan { background: var(--cyan); color: #fff; }
+  .btn-lime { background: var(--lime); color: #fff; }
 
-  .hero-title-wrap {
-    display: flex;
-    align-items: flex-start;
-    gap: 20px;
-    margin-bottom: 18px;
-  }
-
-  .hero-big-emoji {
-    font-size: 56px;
-    line-height: 1;
-    filter: drop-shadow(0 4px 12px rgba(37, 99, 235, 0.2));
-  }
-
-  .hero h1 {
-    font-size: 40px;
-    font-weight: 800;
-    letter-spacing: -1px;
-    color: var(--text-hi);
-    line-height: 1.15;
-    margin: 0;
-  }
-
-  .hero h1 .grad {
-    background: linear-gradient(135deg, #2563eb, #7c3aed);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .hero-desc {
-    font-size: 16.5px;
-    color: var(--text-mid);
-    max-width: 680px;
-    margin-bottom: 10px;
-  }
-
-  .hero-desc-si {
-    font-size: 15.5px;
-    color: var(--text-mid);
-    max-width: 680px;
-    margin-bottom: 24px;
-    padding: 14px 18px;
-    background: var(--bg-soft);
-    border-left: 4px solid var(--accent);
-    border-radius: 0 10px 10px 0;
-  }
-
-  .hero-actions {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 11px 20px;
-    border-radius: 10px;
-    font-size: 14.5px;
-    font-weight: 600;
-    transition: 0.2s;
-    border: 1px solid transparent;
-    cursor: pointer;
-    font-family: inherit;
-    text-decoration: none;
-  }
-  .btn:hover { text-decoration: none; }
-
-  .btn-primary {
-    background: var(--accent);
-    color: #fff;
-    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
-  }
-  .btn-primary:hover { background: var(--accent-2); transform: translateY(-1px); box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35); }
-
-  .btn-secondary {
-    background: var(--bg);
-    color: var(--text);
-    border-color: var(--border-2);
-  }
-  .btn-secondary:hover { background: var(--bg-soft); border-color: var(--accent); color: var(--accent); }
-
-  .btn svg { width: 16px; height: 16px; }
-
-  /* ============ SECTIONS ============ */
-  section {
-    padding: 44px 0;
-    border-bottom: 1px solid var(--border);
-  }
+  section { padding: 44px 0; border-bottom: 1px solid var(--border); }
   section:last-of-type { border-bottom: none; }
+  .section-heading { font-size: 28px; font-weight: 800; color: var(--text-hi); margin-bottom: 10px; letter-spacing: -.5px; scroll-margin-top: calc(var(--nav-h) + 20px); display: flex; align-items: center; gap: 14px; }
+  .section-heading .sec-emoji { width: 44px; height: 44px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+  .section-heading .sec-num { font-size: 13px; font-weight: 800; color: var(--accent); background: var(--accent-bg); padding: 2px 10px; border-radius: 20px; margin-left: auto; letter-spacing: .5px; }
+  .section-heading.purple-accent .sec-num { color: var(--purple); background: var(--purple-bg); }
+  .section-heading.teal-accent .sec-num { color: var(--teal); background: var(--teal-bg); }
+  .section-heading.amber-accent .sec-num { color: var(--amber); background: var(--amber-bg); }
+  .section-heading.pink-accent .sec-num { color: var(--pink); background: var(--pink-bg); }
+  .section-heading.red-accent .sec-num { color: var(--red); background: var(--red-bg); }
+  .section-heading.indigo-accent .sec-num { color: var(--indigo); background: var(--indigo-bg); }
+  .section-heading.emerald-accent .sec-num { color: var(--emerald); background: var(--emerald-bg); }
+  .section-heading.cyan-accent .sec-num { color: var(--cyan); background: var(--cyan-bg); }
+  .section-heading.lime-accent .sec-num { color: var(--lime); background: var(--lime-bg); }
+  .section-heading.lime-accent .sec-emoji { background: var(--lime-bg); border-color: #d9f99d; }
 
-  .section-heading {
-    font-size: 28px;
-    font-weight: 800;
-    color: var(--text-hi);
-    margin-bottom: 10px;
-    letter-spacing: -0.5px;
-    scroll-margin-top: calc(var(--nav-h) + 20px);
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
+  .section-sub { font-size: 15.5px; color: var(--text-mid); margin-bottom: 26px; max-width: 740px; }
+  .section-sub-si { font-size: 15px; color: var(--text-mid); margin-bottom: 26px; max-width: 740px; padding: 12px 16px; background: var(--bg-soft); border-radius: 10px; border: 1px dashed var(--border-2); }
 
-  .section-heading .sec-emoji {
-    width: 44px;
-    height: 44px;
-    background: var(--bg-soft);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    flex-shrink: 0;
-  }
+  .module-divider { margin: 60px 0 0; padding: 40px 0 20px; border-top: 2px dashed var(--border-2); text-align: center; }
+  .module-divider.purple-div { border-top-color: #ddd6fe; }
+  .module-divider.teal-div { border-top-color: #99f6e4; }
+  .module-divider.amber-div { border-top-color: #fde68a; }
+  .module-divider.pink-div { border-top-color: #fbcfe8; }
+  .module-divider.red-div { border-top-color: #fecaca; }
+  .module-divider.indigo-div { border-top-color: #c7d2fe; }
+  .module-divider.emerald-div { border-top-color: #a7f3d0; }
+  .module-divider.cyan-div { border-top-color: #a5f3fc; }
+  .module-divider.lime-div { border-top-color: #d9f99d; }
+  .module-divider .md-tag { display: inline-flex; align-items: center; gap: 10px; padding: 8px 20px; background: var(--purple-bg); color: var(--purple); border: 1px solid #ddd6fe; border-radius: 30px; font-weight: 800; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+  .module-divider.teal-div .md-tag { background: var(--teal-bg); color: var(--teal); border-color: #99f6e4; }
+  .module-divider.amber-div .md-tag { background: var(--amber-bg); color: var(--amber); border-color: #fde68a; }
+  .module-divider.pink-div .md-tag { background: var(--pink-bg); color: var(--pink); border-color: #fbcfe8; }
+  .module-divider.red-div .md-tag { background: var(--red-bg); color: var(--red); border-color: #fecaca; }
+  .module-divider.indigo-div .md-tag { background: var(--indigo-bg); color: var(--indigo); border-color: #c7d2fe; }
+  .module-divider.emerald-div .md-tag { background: var(--emerald-bg); color: var(--emerald); border-color: #a7f3d0; }
+  .module-divider.cyan-div .md-tag { background: var(--cyan-bg); color: var(--cyan); border-color: #a5f3fc; }
+  .module-divider.lime-div .md-tag { background: var(--lime-bg); color: var(--lime); border-color: #d9f99d; }
+  .module-divider .md-title { font-size: 32px; font-weight: 800; color: var(--text-hi); letter-spacing: -.5px; line-height: 1.2; margin-bottom: 8px; }
+  .module-divider .md-title em { font-style: normal; background: linear-gradient(135deg, #7c3aed, #db2777); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .module-divider.teal-div .md-title em { background: linear-gradient(135deg, #0d9488, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .module-divider.amber-div .md-title em { background: linear-gradient(135deg, #d97706, #dc2626); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .module-divider.pink-div .md-title em { background: linear-gradient(135deg, #db2777, #be185d); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .module-divider.red-div .md-title em { background: linear-gradient(135deg, #dc2626, #b91c1c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .module-divider.indigo-div .md-title em { background: linear-gradient(135deg, #4f46e5, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .module-divider.emerald-div .md-title em { background: linear-gradient(135deg, #10b981, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .module-divider.cyan-div .md-title em { background: linear-gradient(135deg, #0891b2, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .module-divider.lime-div .md-title em { background: linear-gradient(135deg, #65a30d, #84cc16); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .module-divider .md-desc { color: var(--text-mid); font-size: 15px; max-width: 600px; margin: 0 auto; }
 
-  .section-heading .sec-num {
-    font-size: 13px;
-    font-weight: 800;
-    color: var(--accent);
-    background: var(--accent-bg);
-    padding: 2px 10px;
-    border-radius: 20px;
-    margin-left: auto;
-    letter-spacing: 0.5px;
-  }
-
-  .section-sub {
-    font-size: 15.5px;
-    color: var(--text-mid);
-    margin-bottom: 26px;
-    max-width: 740px;
-  }
-
-  .section-sub-si {
-    font-size: 15px;
-    color: var(--text-mid);
-    margin-bottom: 26px;
-    max-width: 740px;
-    padding: 12px 16px;
-    background: var(--bg-soft);
-    border-radius: 10px;
-    border: 1px dashed var(--border-2);
-  }
-
-  h3.subhead {
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--text-hi);
-    margin: 30px 0 10px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
+  h3.subhead { font-size: 18px; font-weight: 700; color: var(--text-hi); margin: 30px 0 10px; display: flex; align-items: center; gap: 8px; }
   p { margin: 12px 0; color: var(--text-mid); }
   strong { color: var(--text-hi); font-weight: 700; }
   ul, ol { margin: 12px 0 12px 24px; color: var(--text-mid); }
   li { margin: 8px 0; }
+  p code, li code, td code, blockquote code, .section-sub-si code { background: var(--bg-soft-2); padding: 2px 7px; border-radius: 5px; font-size: .86em; color: #be123c; border: 1px solid var(--border); font-weight: 600; }
 
-  /* Inline code */
-  p code, li code, td code, blockquote code, .section-sub-si code {
-    background: var(--bg-soft-2);
-    padding: 2px 7px;
-    border-radius: 5px;
-    font-size: 0.86em;
-    color: #be123c;
-    border: 1px solid var(--border);
-    font-weight: 600;
-  }
-
-  /* ============ CODE BLOCKS ============ */
-  .code-block {
-    position: relative;
-    margin: 18px 0 22px;
-    border-radius: var(--radius);
-    overflow: hidden;
-    background: var(--code-bg);
-    border: 1px solid #334155;
-    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
-  }
-
-  .code-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 14px;
-    background: var(--code-header);
-    border-bottom: 1px solid #334155;
-    font-family: var(--mono);
-    font-size: 12.5px;
-    color: #94a3b8;
-    font-weight: 600;
-  }
-
-  .code-header .fname {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
+  .code-block { position: relative; margin: 18px 0 22px; border-radius: var(--radius); overflow: hidden; background: var(--code-bg); border: 1px solid #334155; box-shadow: 0 4px 20px rgba(15,23,42,.08); }
+  .code-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; background: var(--code-header); border-bottom: 1px solid #334155; font-family: var(--mono); font-size: 12.5px; color: #94a3b8; font-weight: 600; }
+  .code-header .fname { display: flex; align-items: center; gap: 10px; }
   .code-header .dots { display: flex; gap: 6px; margin-right: 4px; }
   .code-header .dots span { width: 11px; height: 11px; border-radius: 50%; }
   .code-header .dots span:nth-child(1) { background: #ff5f56; }
   .code-header .dots span:nth-child(2) { background: #ffbd2e; }
   .code-header .dots span:nth-child(3) { background: #27c93f; }
-
-  .code-block pre {
-    margin: 0;
-    padding: 18px 68px 18px 20px;
-    font-family: var(--mono);
-    font-size: 13.5px;
-    line-height: 1.75;
-    overflow-x: auto;
-    color: var(--code-text);
-    background: var(--code-bg);
-  }
+  .code-block pre { margin: 0; padding: 18px 68px 18px 20px; font-family: var(--mono); font-size: 13.5px; line-height: 1.75; overflow-x: auto; color: var(--code-text); background: var(--code-bg); max-height: 600px; }
   .code-block pre code { display: block; font-family: inherit; }
-
   .k { color: var(--code-k); font-weight: 500; }
   .s { color: var(--code-s); }
   .c { color: var(--code-c); font-style: italic; }
   .n { color: var(--code-n); }
 
-  /* Copy button */
-  .copy-btn {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    background: #334155;
-    color: #cbd5e1;
-    border: 1px solid #475569;
-    padding: 6px 12px;
-    border-radius: 7px;
-    font-size: 11.5px;
-    font-weight: 700;
-    cursor: pointer;
-    font-family: var(--font);
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    transition: 0.15s;
-    z-index: 2;
-  }
+  .copy-btn { position: absolute; top: 8px; right: 8px; background: #334155; color: #cbd5e1; border: 1px solid #475569; padding: 6px 12px; border-radius: 7px; font-size: 11.5px; font-weight: 700; cursor: pointer; font-family: var(--font); display: inline-flex; align-items: center; gap: 6px; transition: .15s; z-index: 2; }
   .copy-btn:hover { background: #475569; color: #fff; }
   .copy-btn.copied { background: var(--green); border-color: var(--green); color: #fff; }
   .copy-btn svg { width: 13px; height: 13px; }
+  .code-block .copy-btn.in-header { position: static; top: auto; right: auto; }
 
-  .code-block .copy-btn.in-header {
-    position: static;
-    top: auto; right: auto;
-  }
-
-  /* ============ TABLES ============ */
-  .table-wrap {
-    overflow-x: auto;
-    margin: 18px 0;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    background: var(--bg);
-  }
+  .table-wrap { overflow-x: auto; margin: 18px 0; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg); }
   table { width: 100%; border-collapse: collapse; font-size: 14.5px; min-width: 480px; }
   thead { background: var(--bg-soft); }
-  th {
-    color: var(--text-hi);
-    padding: 12px 16px;
-    text-align: left;
-    font-weight: 700;
-    border-bottom: 1px solid var(--border);
-    white-space: nowrap;
-    font-size: 13.5px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  td {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border);
-    color: var(--text-mid);
-  }
+  th { color: var(--text-hi); padding: 12px 16px; text-align: left; font-weight: 700; border-bottom: 1px solid var(--border); white-space: nowrap; font-size: 13.5px; text-transform: uppercase; letter-spacing: .5px; }
+  td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text-mid); }
   tbody tr:last-child td { border-bottom: none; }
   tbody tr:hover td { background: var(--bg-soft); }
 
-  /* ============ CALLOUTS ============ */
-  .callout {
-    padding: 16px 20px;
-    border-radius: var(--radius);
-    margin: 18px 0;
-    border-left: 4px solid;
-    font-size: 14.5px;
-  }
+  .callout { padding: 16px 20px; border-radius: var(--radius); margin: 18px 0; border-left: 4px solid; font-size: 14.5px; }
   .callout p { margin: 6px 0; color: inherit; }
+  .callout.info { background: var(--accent-bg); border-color: var(--accent); color: #1e40af; }
+  .callout.warn { background: var(--yellow-bg); border-color: var(--yellow); color: #92400e; }
+  .callout.danger { background: var(--red-bg); border-color: var(--red); color: #991b1b; }
+  .callout.success { background: var(--green-bg); border-color: var(--green); color: #065f46; }
+  .callout.purple { background: var(--purple-bg); border-color: var(--purple); color: #5b21b6; }
+  .callout.teal { background: var(--teal-bg); border-color: var(--teal); color: #115e59; }
+  .callout.amber { background: var(--amber-bg); border-color: var(--amber); color: #92400e; }
+  .callout.pink { background: var(--pink-bg); border-color: var(--pink); color: #9d174d; }
+  .callout.red { background: var(--red-bg); border-color: var(--red); color: #991b1b; }
+  .callout.indigo { background: var(--indigo-bg); border-color: var(--indigo); color: #3730a3; }
+  .callout.emerald { background: var(--emerald-bg); border-color: var(--emerald); color: #065f46; }
+  .callout.cyan { background: var(--cyan-bg); border-color: var(--cyan); color: #155e75; }
+  .callout.lime { background: var(--lime-bg); border-color: var(--lime); color: #3f6212; }
+  .callout-title { display: flex; align-items: center; gap: 8px; font-weight: 800; margin-bottom: 8px; font-size: 14.5px; }
+  .callout code { background: rgba(255,255,255,.6); border-color: rgba(0,0,0,.1); color: inherit; }
 
-  .callout.info    { background: var(--accent-bg); border-color: var(--accent); color: #1e40af; }
-  .callout.warn    { background: var(--yellow-bg); border-color: var(--yellow); color: #92400e; }
-  .callout.danger  { background: var(--red-bg);    border-color: var(--red);    color: #991b1b; }
-  .callout.success { background: var(--green-bg);  border-color: var(--green);  color: #065f46; }
-  .callout.purple  { background: var(--purple-bg); border-color: var(--purple); color: #5b21b6; }
-
-  .callout-title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 800;
-    margin-bottom: 8px;
-    font-size: 14.5px;
-  }
-
-  .callout code {
-    background: rgba(255,255,255,0.6);
-    border-color: rgba(0,0,0,0.1);
-    color: inherit;
-  }
-
-  /* ============ QUICK GRID ============ */
-  .quick-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    gap: 16px;
-    margin: 22px 0;
-  }
-
-  .quick-card {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 22px 20px;
-    transition: 0.25s;
-    position: relative;
-  }
-  .quick-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.1);
-  }
-
-  .quick-emoji {
-    font-size: 32px;
-    margin-bottom: 12px;
-    display: block;
-    line-height: 1;
-  }
-
-  .quick-step {
-    display: inline-flex;
-    width: 26px; height: 26px;
-    align-items: center;
-    justify-content: center;
-    background: var(--accent);
-    color: #fff;
-    border-radius: 7px;
-    font-weight: 800;
-    font-size: 13px;
-    margin-bottom: 12px;
-  }
-
-  .quick-card h4 {
-    font-size: 15.5px;
-    font-weight: 700;
-    color: var(--text-hi);
-    margin-bottom: 6px;
-  }
-  .quick-card p { font-size: 13.5px; margin: 0; color: var(--text-mid); }
-
-  /* ============ FEATURE GRID ============ */
-  .feature-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 14px;
-    margin: 20px 0;
-  }
-
-  .feature-item {
-    display: flex;
-    gap: 14px;
-    padding: 16px 18px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    font-size: 14.5px;
-    transition: 0.2s;
-  }
-  .feature-item:hover {
-    border-color: var(--border-2);
-    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.05);
-  }
-
-  .feature-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 11px;
-    background: var(--bg-soft);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    flex-shrink: 0;
-    line-height: 1;
-  }
-
+  .feature-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin: 20px 0; }
+  .feature-item { display: flex; gap: 14px; padding: 16px 18px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); font-size: 14.5px; transition: .2s; }
+  .feature-item:hover { border-color: var(--border-2); box-shadow: 0 2px 12px rgba(15,23,42,.05); }
+  .feature-icon { width: 44px; height: 44px; border-radius: 11px; background: var(--bg-soft); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; line-height: 1; }
   .feature-item strong { color: var(--text-hi); display: block; margin-bottom: 4px; font-size: 15px; }
   .feature-item span { font-size: 13.5px; color: var(--text-mid); line-height: 1.6; }
 
-  /* ============ FOOTER ============ */
-  .footer {
-    margin-top: 60px;
-    padding: 44px 56px 32px;
-    background: var(--bg);
-    border-top: 1px solid var(--border);
-  }
-
-  .footer-grid {
-    max-width: 900px;
-    margin: 0 auto 28px;
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 32px;
-  }
-
-  .footer-brand {
-    color: var(--text-hi);
-    font-weight: 800;
-    font-size: 16px;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .footer-desc {
-    color: var(--text-mid);
-    font-size: 13.5px;
-    line-height: 1.7;
-  }
-
-  .footer h5 {
-    color: var(--text-hi);
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 14px;
-    font-weight: 700;
-  }
-
+  .footer { margin-top: 60px; padding: 44px 56px 32px; background: var(--bg); border-top: 1px solid var(--border); }
+  .footer-grid { max-width: 900px; margin: 0 auto 28px; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 20px; }
+  .footer-brand { color: var(--text-hi); font-weight: 800; font-size: 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .footer-desc { color: var(--text-mid); font-size: 13.5px; line-height: 1.7; }
+  .footer h5 { color: var(--text-hi); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; font-weight: 700; }
   .footer ul { list-style: none; margin: 0; padding: 0; }
-  .footer li { margin: 8px 0; }
-  .footer li a {
-    color: var(--text-mid);
-    font-size: 13.5px;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
+  .footer li { margin: 7px 0; }
+  .footer li a { color: var(--text-mid); font-size: 12.5px; display: inline-flex; align-items: center; gap: 6px; }
   .footer li a:hover { color: var(--accent); text-decoration: none; }
+  .footer-bottom { max-width: 900px; margin: 0 auto; padding-top: 22px; border-top: 1px solid var(--border); text-align: center; font-size: 12.5px; color: var(--text-mute); }
 
-  .footer-bottom {
-    max-width: 900px;
-    margin: 0 auto;
-    padding-top: 22px;
-    border-top: 1px solid var(--border);
-    text-align: center;
-    font-size: 12.5px;
-    color: var(--text-mute);
-  }
-
-  /* ============ BACK TO TOP ============ */
-  .back-to-top {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    width: 44px; height: 44px;
-    border-radius: 50%;
-    background: var(--accent);
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: 0.3s;
-    z-index: 90;
-    box-shadow: 0 6px 22px rgba(37, 99, 235, 0.4);
-  }
+  .back-to-top { position: fixed; bottom: 24px; right: 24px; width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: #fff; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: .3s; z-index: 90; box-shadow: 0 6px 22px rgba(37,99,235,.4); }
   .back-to-top.visible { opacity: 1; pointer-events: auto; }
   .back-to-top:hover { background: var(--accent-2); transform: translateY(-2px); }
   .back-to-top svg { width: 20px; height: 20px; }
 
-  /* ============ TOAST ============ */
-  .toast {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: var(--green);
-    color: #fff;
-    padding: 12px 24px;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 700;
-    box-shadow: 0 12px 32px rgba(5, 150, 105, 0.35);
-    opacity: 0;
-    transition: all 0.3s ease;
-    pointer-events: none;
-    z-index: 9999;
-    max-width: 90vw;
-    text-align: center;
-  }
+  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--green); color: #fff; padding: 12px 24px; border-radius: 10px; font-size: 14px; font-weight: 700; box-shadow: 0 12px 32px rgba(5,150,105,.35); opacity: 0; transition: all .3s ease; pointer-events: none; z-index: 9999; max-width: 90vw; text-align: center; }
   .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-  /* ============ OVERLAY ============ */
-  .overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(15, 23, 42, 0.4);
-    z-index: 40;
-    top: var(--nav-h);
-  }
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,.4); z-index: 40; top: var(--nav-h); }
   .overlay.visible { display: block; }
 
-  /* ============ RESPONSIVE ============ */
+  .filter-chain { background: var(--code-bg); border-radius: var(--radius); padding: 18px 22px; font-family: var(--mono); font-size: 13px; line-height: 1.9; color: var(--code-text); margin: 18px 0; overflow-x: auto; }
+  .filter-chain .part { color: #7dd3fc; font-weight: 600; }
+  .filter-chain .op { color: #fbbf24; }
+
   @media (max-width: 900px) {
     .main { padding: 30px 24px 60px; margin-left: 0; }
     .hero h1 { font-size: 30px; }
@@ -784,14 +259,14 @@
     .menu-toggle { display: block; }
     .sidebar { transform: translateX(-100%); }
     .sidebar.open { transform: translateX(0); }
-    .footer-grid { grid-template-columns: 1fr; gap: 22px; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 22px; }
     .footer { padding: 32px 24px 22px; }
     .nav { padding: 0 16px; gap: 10px; }
     .section-heading { font-size: 22px; flex-wrap: wrap; }
     .section-heading .sec-emoji { width: 38px; height: 38px; font-size: 19px; }
     .section-heading .sec-num { font-size: 11px; }
+    .module-divider .md-title { font-size: 24px; }
   }
-
   @media (max-width: 480px) {
     .hero h1 { font-size: 24px; }
     .hero-title-wrap { gap: 12px; }
@@ -800,6 +275,9 @@
     .code-block pre { font-size: 12.5px; padding: 14px 52px 14px 12px; }
     .footer-bottom { font-size: 11.5px; }
     body { font-size: 15px; }
+    .hero-modules { grid-template-columns: 1fr 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .filter-chain { font-size: 11px; }
   }
 
   ::-webkit-scrollbar { width: 10px; height: 10px; }
@@ -810,863 +288,651 @@
 </head>
 <body>
 
-<!-- ============ NAV ============ -->
 <nav class="nav">
-  <a href="#top" class="nav-logo">
-    <div class="logo-mark">📘</div>
-    <div class="logo-text">
-      PathumTech
-      <small>Docs</small>
-    </div>
-  </a>
-
+  <a href="#top" class="nav-logo"><div class="logo-mark">📘</div><div class="logo-text">PathumTech<small>Docs</small></div></a>
   <div class="nav-links">
-    <a href="#overview">🎯 Overview</a>
-    <a href="#quickstart">⚡ Quick Start</a>
-    <a href="#explained">🔍 Explained</a>
-    <a href="#examples">💡 Examples</a>
-    <a href="#faq">❓ FAQ</a>
+    <a href="#overview">🗄️ db</a>
+    <a href="#emix-overview">🎨 emix</a>
+    <a href="#gif-overview">🎬 gif</a>
+    <a href="#fn-overview">🛠️ fn</a>
+    <a href="#lib-overview">📦 idx</a>
+    <a href="#mongo-overview">🍃 mongo</a>
+    <a href="#msg-overview">📨 msg</a>
+    <a href="#pl-overview">🔌 plugin</a>
+    <a href="#st-overview">🎨 sticker</a>
+    <a href="#vid-overview">🎥 video</a>
   </div>
-
   <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
 </nav>
 
 <div class="overlay" id="overlay"></div>
 
-<!-- ============ LAYOUT ============ -->
 <div class="layout" id="top">
-
-  <!-- ============ SIDEBAR ============ -->
   <aside class="sidebar" id="sidebar">
-    <h3>Getting Started</h3>
+    <h3>📘 M1 <span class="mod-tag mt1">database</span></h3>
+    <nav><a href="#overview"><span class="sb-emoji">🎯</span>Overview</a></nav>
+    <h3>🎨 M2 <span class="mod-tag mt2">emix</span></h3>
+    <nav><a href="#emix-overview"><span class="sb-emoji">🎨</span>Overview</a></nav>
+    <h3>🎬 M3 <span class="mod-tag mt3">fetchGif</span></h3>
+    <nav><a href="#gif-overview"><span class="sb-emoji">🎬</span>Overview</a></nav>
+    <h3>🛠️ M4 <span class="mod-tag mt4">functions</span></h3>
+    <nav><a href="#fn-overview"><span class="sb-emoji">🛠️</span>Overview</a></nav>
+    <h3>📦 M5 <span class="mod-tag mt5">index</span></h3>
+    <nav><a href="#lib-overview"><span class="sb-emoji">📦</span>Overview</a></nav>
+    <h3>🍃 M6 <span class="mod-tag mt6">mongo</span></h3>
+    <nav><a href="#mongo-overview"><span class="sb-emoji">🍃</span>Overview</a></nav>
+    <h3>📨 M7 <span class="mod-tag mt7">msg</span></h3>
+    <nav><a href="#msg-overview"><span class="sb-emoji">📨</span>Overview</a></nav>
+    <h3>🔌 M8 <span class="mod-tag mt8">pluginLoader</span></h3>
+    <nav><a href="#pl-overview"><span class="sb-emoji">🔌</span>Overview</a></nav>
+    <h3>🎨 M9 <span class="mod-tag mt9">sticker-utils</span></h3>
+    <nav><a href="#st-overview"><span class="sb-emoji">🎨</span>Overview</a></nav>
+    <h3>🎥 M10 <span class="mod-tag mt10">video-utils</span></h3>
     <nav>
-      <a href="#overview"><span class="sb-emoji">🎯</span>Overview</a>
-      <a href="#quickstart"><span class="sb-emoji">⚡</span>Quick Start</a>
-      <a href="#install"><span class="sb-emoji">📦</span>Installation</a>
-      <a href="#config"><span class="sb-emoji">⚙️</span>Configuration</a>
-    </nav>
-
-    <h3>Deep Dive</h3>
-    <nav>
-      <a href="#explained"><span class="sb-emoji">🔍</span>Line-by-Line</a>
-      <a href="#flow"><span class="sb-emoji">🔄</span>How It Works</a>
-      <a href="#api"><span class="sb-emoji">📚</span>API Reference</a>
-    </nav>
-
-    <h3>Usage</h3>
-    <nav>
-      <a href="#examples"><span class="sb-emoji">💡</span>Examples</a>
-      <a href="#compare"><span class="sb-emoji">📊</span>SQLite vs Postgres</a>
-    </nav>
-
-    <h3>Help</h3>
-    <nav>
-      <a href="#troubleshoot"><span class="sb-emoji">🐛</span>Troubleshooting</a>
-      <a href="#faq"><span class="sb-emoji">❓</span>FAQ</a>
+      <a href="#vid-overview" class="newest-link"><span class="sb-emoji">🎥</span>Overview</a>
+      <a href="#vid-explained" class="newest-link"><span class="sb-emoji">🔍</span>Explained</a>
+      <a href="#vid-diff" class="newest-link"><span class="sb-emoji">⚖️</span>vs Sticker</a>
+      <a href="#vid-usage" class="newest-link"><span class="sb-emoji">💡</span>Usage</a>
     </nav>
   </aside>
 
-  <!-- ============ MAIN ============ -->
   <main class="main">
     <div class="content-wrap">
 
-      <!-- HERO -->
       <header class="hero">
         <div class="badge">
           <span class="dot-live"></span>
-          v1.0 · Production Ready
+          10 Modules · Production Ready
         </div>
-
         <div class="hero-title-wrap">
-          <div class="hero-big-emoji">🗄️</div>
-          <h1>
-            <span class="grad">lib/database.js</span><br />
-            Sequelize Database Connection
-          </h1>
+          <div class="hero-big-emoji">📚</div>
+          <h1><span class="grad">PathumTech Docs</span><br />lib/ Modules Documentation</h1>
         </div>
-
         <p class="hero-desc">
-          Professional documentation for the database layer of a WhatsApp bot.
-          Singleton pattern · SQLite + Postgres support · Clean, production-ready code.
+          Complete documentation for all lib/ modules — database, emoji, GIF, helpers, barrel,
+          MongoDB, msg, pluginLoader, sticker-utils, and video-utils. All in Sinhala.
+        </p>
+        <p class="hero-desc-si">
+          👋 දැන් <strong>video-utils.js</strong> එකත් එකතු කරලා <strong>modules 10</strong>ක සම්පූර්ණ documentation.
+          Video → WebP sticker conversion — duration trim (-ss, -t) එක්ක. 🎥
         </p>
 
-        <p class="hero-desc-si">
-          👋 ආයුබෝවන්! මේ තමයි ඔයාගේ WhatsApp bot එකේ <strong>database connection එක handle කරන</strong>
-          කේත ගොනුව. මෙතනින් <strong>SQLite</strong> (local file) හෝ <strong>Postgres</strong> (cloud)
-          තෝරාගෙන, එකම connection එකක් විතරක් හදනවා. පහළ තියෙන සෑම කොටසක්ම සිංහලෙන් පැහැදිලි කරලා තියෙනවා. 🎯
-        </p>
+        <div class="hero-modules">
+          <a href="#overview" class="module-card"><div class="m-icon">🗄️</div><div class="m-info"><div class="m-title">database.js</div><div class="m-sub">Sequelize</div></div></a>
+          <a href="#emix-overview" class="module-card purple"><div class="m-icon">🎨</div><div class="m-info"><div class="m-title">emix-utils.js</div><div class="m-sub">Emoji</div></div></a>
+          <a href="#gif-overview" class="module-card teal"><div class="m-icon">🎬</div><div class="m-info"><div class="m-title">fetchGif.js</div><div class="m-sub">GIF→MP4</div></div></a>
+          <a href="#fn-overview" class="module-card amber"><div class="m-icon">🛠️</div><div class="m-info"><div class="m-title">functions.js</div><div class="m-sub">Helpers</div></div></a>
+          <a href="#lib-overview" class="module-card pink"><div class="m-icon">📦</div><div class="m-info"><div class="m-title">index.js</div><div class="m-sub">Barrel</div></div></a>
+          <a href="#mongo-overview" class="module-card red"><div class="m-icon">🍃</div><div class="m-info"><div class="m-title">mongo.js</div><div class="m-sub">MongoDB</div></div></a>
+          <a href="#msg-overview" class="module-card indigo"><div class="m-icon">📨</div><div class="m-info"><div class="m-title">msg.js</div><div class="m-sub">Message</div></div></a>
+          <a href="#pl-overview" class="module-card emerald"><div class="m-icon">🔌</div><div class="m-info"><div class="m-title">pluginLoader.js</div><div class="m-sub">Plugins</div></div></a>
+          <a href="#st-overview" class="module-card cyan"><div class="m-icon">🎨</div><div class="m-info"><div class="m-title">sticker-utils.js</div><div class="m-sub">Stickers</div></div></a>
+          <a href="#vid-overview" class="module-card lime"><div class="m-icon">🎥</div><div class="m-info"><div class="m-title">video-utils.js</div><div class="m-sub">Video</div></div></a>
+        </div>
 
         <div class="hero-actions">
-          <a href="#overview" class="btn btn-primary">
-            📄 View Source
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </a>
-          <a href="#explained" class="btn btn-secondary">
-            🔍 Read the Code
-          </a>
+          <a href="#overview" class="btn btn-primary">🗄️ db</a>
+          <a href="#emix-overview" class="btn btn-purple">🎨 emix</a>
+          <a href="#gif-overview" class="btn btn-teal">🎬 gif</a>
+          <a href="#fn-overview" class="btn btn-amber">🛠️ fn</a>
+          <a href="#lib-overview" class="btn btn-pink">📦 idx</a>
+          <a href="#mongo-overview" class="btn btn-red">🍃 mongo</a>
+          <a href="#msg-overview" class="btn btn-indigo">📨 msg</a>
+          <a href="#pl-overview" class="btn btn-emerald">🔌 plugin</a>
+          <a href="#st-overview" class="btn btn-cyan">🎨 sticker</a>
+          <a href="#vid-overview" class="btn btn-lime">🎥 video</a>
         </div>
       </header>
 
-      <!-- ============ OVERVIEW ============ -->
+      <!-- ============ M1 database ============ -->
       <section id="overview">
-        <h2 class="section-heading">
-          <span class="sec-emoji">🎯</span>
-          Overview
-          <span class="sec-num">01</span>
-        </h2>
+        <h2 class="section-heading"><span class="sec-emoji">🎯</span>Overview — database.js<span class="sec-num">01</span></h2>
+        <div class="section-sub-si">💡 Sequelize connection — SQLite locally, Postgres in production.</div>
+        <div class="callout success"><div class="callout-title">✅ Singleton</div><p>Call 1: create. Call 2+: ඒකම. Memory leak නෑ.</p></div>
+        <div class="callout danger"><div class="callout-title">🚨 sync() await නෑ</div><p>විසඳුම: <code>await DATABASE.sync()</code>.</p></div>
+      </section>
+
+      <!-- M2 emix -->
+      <div class="module-divider purple-div">
+        <span class="md-tag">🎨 Module 2</span>
+        <div class="md-title"><em>lib/emix-utils.js</em></div>
+        <p class="md-desc">Emoji Mix API helper.</p>
+      </div>
+      <section id="emix-overview">
+        <h2 class="section-heading purple-accent"><span class="sec-emoji">🎨</span>Overview — emix-utils.js<span class="sec-num">02</span></h2>
+        <div class="section-sub-si">💡 <code>fetchEmix(e1, e2)</code> — emoji දෙකක් දීලා, image URL එකක්.</div>
+      </section>
+
+      <!-- M3 fetchGif -->
+      <div class="module-divider teal-div">
+        <span class="md-tag">🎬 Module 3</span>
+        <div class="md-title"><em>lib/fetchGif.js</em></div>
+        <p class="md-desc">GIF → MP4 video conversion.</p>
+      </div>
+      <section id="gif-overview">
+        <h2 class="section-heading teal-accent"><span class="sec-emoji">🎬</span>Overview — fetchGif.js<span class="sec-num">03</span></h2>
+        <div class="section-sub-si">💡 <code>fetchGif()</code> + <code>gifToVideo()</code> — ffmpeg පාවිච්චි කරලා.</div>
+      </section>
+
+      <!-- M4 functions -->
+      <div class="module-divider amber-div">
+        <span class="md-tag">🛠️ Module 4</span>
+        <div class="md-title"><em>lib/functions.js</em></div>
+        <p class="md-desc">Helper utilities 9ක්.</p>
+      </div>
+      <section id="fn-overview">
+        <h2 class="section-heading amber-accent"><span class="sec-emoji">🛠️</span>Overview — functions.js<span class="sec-num">04</span></h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Function</th><th>කරන දේ</th></tr></thead>
+            <tbody>
+              <tr><td><code>getBuffer</code></td><td>URL → buffer</td></tr>
+              <tr><td><code>getGroupAdmins</code></td><td>Admin JIDs</td></tr>
+              <tr><td><code>getRandom</code></td><td>Random filename</td></tr>
+              <tr><td><code>h2k</code></td><td>1000 → 1K</td></tr>
+              <tr><td><code>isUrl</code></td><td>URL validation</td></tr>
+              <tr><td><code>Json</code></td><td>Pretty JSON</td></tr>
+              <tr><td><code>runtime</code></td><td>Uptime format</td></tr>
+              <tr><td><code>sleep</code></td><td>Async delay</td></tr>
+              <tr><td><code>fetchJson</code></td><td>API JSON</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- M5 index -->
+      <div class="module-divider pink-div">
+        <span class="md-tag">📦 Module 5</span>
+        <div class="md-title"><em>lib/index.js</em></div>
+        <p class="md-desc">Barrel export — single entry point.</p>
+      </div>
+      <section id="lib-overview">
+        <h2 class="section-heading pink-accent"><span class="sec-emoji">📦</span>Overview — index.js<span class="sec-num">05</span></h2>
+        <div class="section-sub-si">💡 එකම <code>require('./lib')</code> එකෙන් ඔක්කොම ගන්න පුළුවන්.</div>
+      </section>
+
+      <!-- M6 mongo -->
+      <div class="module-divider red-div">
+        <span class="md-tag">🍃 Module 6</span>
+        <div class="md-title"><em>lib/mongo.js</em></div>
+        <p class="md-desc">MongoDB CRUD helpers.</p>
+      </div>
+      <section id="mongo-overview">
+        <h2 class="section-heading red-accent"><span class="sec-emoji">🍃</span>Overview — mongo.js<span class="sec-num">06</span></h2>
+        <div class="section-sub-si">💡 Users, sessions, config — MongoDB. <code>npm install mongodb</code>.</div>
+        <div class="callout warn"><div class="callout-title">⚠️ _id remove</div><p><code>const { _id, ...rest }</code> use කරන්න.</p></div>
+      </section>
+
+      <!-- M7 msg -->
+      <div class="module-divider indigo-div">
+        <span class="md-tag">📨 Module 7</span>
+        <div class="md-title"><em>lib/msg.js</em></div>
+        <p class="md-desc">Message parser + reply methods.</p>
+      </div>
+      <section id="msg-overview">
+        <h2 class="section-heading indigo-accent"><span class="sec-emoji">📨</span>Overview — msg.js<span class="sec-num">07</span></h2>
+        <div class="section-sub-si">💡 <code>sms()</code> — messages parse. <code>downloadMediaMessage()</code> — media download.</div>
+        <div class="callout indigo"><div class="callout-title">💡 Baileys dependency</div><p><code>@whiskeysockets/baileys</code></p></div>
+      </section>
+
+      <!-- M8 pluginLoader -->
+      <div class="module-divider emerald-div">
+        <span class="md-tag">🔌 Module 8</span>
+        <div class="md-title"><em>lib/pluginLoader.js</em></div>
+        <p class="md-desc">Plugin auto-discovery + hot reload.</p>
+      </div>
+      <section id="pl-overview">
+        <h2 class="section-heading emerald-accent"><span class="sec-emoji">🔌</span>Overview — pluginLoader.js<span class="sec-num">08</span></h2>
+        <div class="section-sub-si">💡 <code>loadPlugins(dir, ctx)</code> — plugins auto-discover + <code>init()</code> call කරනවා. Hot reload — <code>require.cache</code> clear.</div>
+      </section>
+
+      <!-- M9 sticker -->
+      <div class="module-divider cyan-div">
+        <span class="md-tag">🎨 Module 9</span>
+        <div class="md-title"><em>lib/sticker-utils.js</em></div>
+        <p class="md-desc">GIF → WebP sticker conversion.</p>
+      </div>
+      <section id="st-overview">
+        <h2 class="section-heading cyan-accent"><span class="sec-emoji">🎨</span>Overview — sticker-utils.js<span class="sec-num">09</span></h2>
+        <div class="section-sub-si">💡 <code>fetchImage</code>, <code>fetchGif</code>, <code>gifToSticker</code> — GIF → WebP. FFmpeg palette generation.</div>
+        <div class="callout cyan"><div class="callout-title">🎯 WhatsApp limits</div><p>512×512, 100KB (static), 500KB (animated), 10s max.</p></div>
+      </section>
+
+      <!-- ============ MODULE 10: video-utils.js ============ -->
+      <div class="module-divider lime-div">
+        <span class="md-tag">🎥 Module 10</span>
+        <div class="md-title"><em>lib/video-utils.js</em></div>
+        <p class="md-desc">
+          Video/MP4 → WebP sticker conversion. <code>sticker-utils.js</code> වගේම තමයි, නමුත්
+          <strong>video input</strong> support + <strong>duration trim</strong> (<code>-ss</code>, <code>-t</code>) —
+          video එකේ first 5 seconds විතරක් ගන්නවා.
+        </p>
+      </div>
+
+      <!-- Overview -->
+      <section id="vid-overview">
+        <h2 class="section-heading lime-accent"><span class="sec-emoji">🎥</span>Overview — video-utils.js<span class="sec-num">10</span></h2>
         <p class="section-sub">
-          <code>lib/database.js</code> is the foundation of the bot's database layer.
-          It creates a single, reusable Sequelize connection — SQLite locally, Postgres in production.
+          Convert video buffers (MP4, WebM, GIF) to WebP stickers with duration trimming.
+          Same filter chain as <code>sticker-utils.js</code>, but adds <code>-ss</code> (start time)
+          and <code>-t</code> (duration) options.
         </p>
 
         <div class="section-sub-si">
-          💡 <strong>සිංහලෙන් කියනවා නම්:</strong> මේ ගොනුව තමයි bot එකේ <strong>"database manager"</strong> එක.
-          මේකෙන් database connection එකක් හදලා, ඒක <strong>එකම එක</strong> විදියට තියාගෙන,
-          අනිත් code files වලට ඒක දෙනවා. Local එකේදී SQLite file එකක්, production එකේදී Postgres
-          cloud database එකක් — දෙකම handle කරනවා. 🚀
+          💡 <strong>සිංහලෙන්:</strong> මේ file එක <strong>video එකක්</strong> (MP4, WebM) WebP sticker එකකට convert කරනවා.
+          <code>sticker-utils.js</code> එකේ <code>gifToSticker()</code> එකට <strong>සමානයි</strong>, නමුත්
+          අමතරව 2ක් තියෙනවා: (1) <strong><code>-ss 00:00:00</code></strong> — video එකේ මුල ඉඳන් පටන් ගන්නවා,
+          (2) <strong><code>-t 00:00:05</code></strong> — <strong>first 5 seconds</strong> විතරයි ගන්නවා. Video එක දිග වැඩියි නම්
+          sticker එකට trim කරන්න මේක උදව් වෙනවා. 🎯
         </div>
 
         <div class="feature-list">
           <div class="feature-item">
-            <div class="feature-icon">🗄️</div>
-            <div>
-              <strong>Dual Database Support</strong>
-              <span>SQLite (local file) සහ Postgres (cloud) — දෙකම එකම code එකෙන්</span>
-            </div>
+            <div class="feature-icon">🎥</div>
+            <div><strong>Video Input</strong><span>MP4, WebM, GIF — ඕන video buffer</span></div>
           </div>
           <div class="feature-item">
-            <div class="feature-icon">🔒</div>
-            <div>
-              <strong>Singleton Pattern</strong>
-              <span>එකම connection එක විතරයි — memory leak නෑ</span>
-            </div>
+            <div class="feature-icon">✂️</div>
+            <div><strong>Duration Trim</strong><span><code>-t 00:00:05</code> — first 5s</span></div>
           </div>
           <div class="feature-item">
-            <div class="feature-icon">⚙️</div>
-            <div>
-              <strong>Env-Based Config</strong>
-              <span><code>DATABASE_URL</code> එකෙන් SQLite/Postgres switch</span>
-            </div>
+            <div class="feature-icon">▶️</div>
+            <div><strong>Start Time</strong><span><code>-ss 00:00:00</code> — offset</span></div>
           </div>
           <div class="feature-item">
-            <div class="feature-icon">🌐</div>
-            <div>
-              <strong>SSL Support</strong>
-              <span>Neon, Supabase, Railway වගේ cloud DB වලට</span>
-            </div>
+            <div class="feature-icon">🎨</div>
+            <div><strong>WebP Output</strong><span>WhatsApp sticker format</span></div>
           </div>
           <div class="feature-item">
-            <div class="feature-icon">🔄</div>
-            <div>
-              <strong>Auto-Sync</strong>
-              <span>Tables automatic ව හැදෙනවා</span>
-            </div>
+            <div class="feature-icon">📐</div>
+            <div><strong>320×320</strong><span>Sticker size + transparency</span></div>
           </div>
           <div class="feature-item">
-            <div class="feature-icon">🧹</div>
-            <div>
-              <strong>Silent Logging</strong>
-              <span>Console එක clean — SQL spam නෑ</span>
-            </div>
+            <div class="feature-icon">🔤</div>
+            <div><strong>Base36 Names</strong><span>Short readable filenames</span></div>
           </div>
+        </div>
+
+        <h3 class="subhead">📋 Export</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Function</th><th>Input</th><th>Return</th></tr></thead>
+            <tbody>
+              <tr><td><code>videoToWebp(videoBuffer)</code></td><td>Buffer (MP4/WebM/GIF)</td><td><code>Promise&lt;Buffer&gt;</code> (WebP)</td></tr>
+            </tbody>
+          </table>
         </div>
 
         <h3 class="subhead">📄 සම්පූර්ණ Source Code</h3>
-        <p>
-          පහත තියෙන්නේ සම්පූර්ණ <code>lib/database.js</code> file එක. <strong>Copy</strong> button
-          එක ඔබලා ඔයාගේ project එකට කෙලින්ම paste කරන්න පුළුවන්. ඊළඟ section එකේ හැම line එකක්ම වෙන වෙනම පැහැදිලි කරලා තියෙනවා.
-        </p>
-
         <div class="code-block">
-          <div class="code-header">
-            <div class="fname">
-              <div class="dots"><span></span><span></span><span></span></div>
-              📄 lib/database.js
-            </div>
-            <button class="copy-btn in-header" data-copy="ovFull">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-              </svg>
-              Copy
-            </button>
-          </div>
-<pre><code id="ovFull">const Sequelize = require('sequelize');
+          <div class="code-header"><div class="fname"><div class="dots"><span></span><span></span><span></span></div>🎥 lib/video-utils.js</div><button class="copy-btn in-header" data-copy="vidFull">Copy</button></div>
+<pre><code id="vidFull">const fs = require('fs');
+const path = require('path');
+const { tmpdir } = require('os');
+const Crypto = require('crypto');
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+const ffmpeg = require('fluent-ffmpeg');
 
-class DatabaseManager {
-    static instance = null;
+// Set ffmpeg path
+ffmpeg.setFfmpegPath(ffmpegPath);
 
-    static getInstance() {
-        if (!DatabaseManager.instance) {
-            const DATABASE_URL = process.env.DATABASE_URL || './database.db';
+/**
+ * Converts a video or GIF buffer to a WebP sticker format.
+ * @param {Buffer} videoBuffer - The video or GIF buffer to convert.
+ * @returns {Promise&lt;Buffer&gt;} - The converted WebP sticker buffer.
+ */
+async function videoToWebp(videoBuffer) {
+  const outputPath = path.join(
+    tmpdir(),
+    Crypto.randomBytes(6).readUIntLE(0, 6).toString(36) + '.webp'
+  );
+  const inputPath = path.join(
+    tmpdir(),
+    Crypto.randomBytes(6).readUIntLE(0, 6).toString(36) + '.mp4'
+  );
 
-            DatabaseManager.instance =
-                DATABASE_URL === './database.db'
-                    ? new Sequelize({
-                            dialect: 'sqlite',
-                            storage: DATABASE_URL,
-                            logging: false,
-                      })
-                    : new Sequelize(DATABASE_URL, {
-                            dialect: 'postgres',
-                            ssl: true,
-                            protocol: 'postgres',
-                            dialectOptions: {
-                                native: true,
-                                ssl: { require: true, rejectUnauthorized: false },
-                            },
-                            logging: false,
-                      });
-        }
-        return DatabaseManager.instance;
-    }
+  // Save the video buffer to a file
+  fs.writeFileSync(inputPath, videoBuffer);
+
+  await new Promise((resolve, reject) =&gt; {
+    ffmpeg(inputPath)
+      .on('error', reject)
+      .on('end', () =&gt; resolve(true))
+      .addOutputOptions([
+        '-vcodec', 'libwebp',
+        '-vf', "scale='min(320,iw)':min'(320,ih)':force_original_aspect_ratio=decrease,fps=15,pad=320:320:-1:-1:color=white@0.0,split [a][b];[a] palettegen=reserve_transparent=on:transparency_color=ffffff [p];[b][p] paletteuse",
+        '-loop', '0',
+        '-ss', '00:00:00',
+        '-t', '00:00:05',
+        '-preset', 'default',
+        '-an',
+        '-vsync', '0'
+      ])
+      .toFormat('webp')
+      .save(outputPath);
+  });
+
+  const webpBuffer = fs.readFileSync(outputPath);
+  fs.unlinkSync(outputPath);
+  fs.unlinkSync(inputPath);
+
+  return webpBuffer;
 }
 
-const DATABASE = DatabaseManager.getInstance();
-
-DATABASE.sync()
-    .then(() =&gt; {
-        console.log('Database synchronized successfully.');
-    })
-    .catch((error) =&gt; {
-        console.error('Error synchronizing the database:', error);
-    });
-
-module.exports = { DATABASE };</code></pre>
+module.exports = {
+  videoToWebp
+};</code></pre>
         </div>
 
-        <div class="callout info">
-          <div class="callout-title">💡 උපදෙස</div>
+        <div class="callout lime">
+          <div class="callout-title">💡 Dependencies</div>
+          <p><code>fluent-ffmpeg</code> + <code>@ffmpeg-installer/ffmpeg</code> විතරයි. Install: <code>npm install fluent-ffmpeg @ffmpeg-installer/ffmpeg</code></p>
+          <p><strong>Note:</strong> <code>axios</code> ඕන නෑ — video buffer එක caller එකෙන් එනවා.</p>
+        </div>
+      </section>
+
+      <!-- Explained -->
+      <section id="vid-explained">
+        <h2 class="section-heading lime-accent"><span class="sec-emoji">🔍</span>Line-by-Line — video-utils.js<span class="sec-num">11</span></h2>
+
+        <h3 class="subhead">① Imports</h3>
+        <div class="code-block"><button class="copy-btn" data-copy="vid1">Copy</button>
+<pre><code id="vid1">const fs = require('fs');
+const path = require('path');
+const { tmpdir } = require('os');
+const Crypto = require('crypto');
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+const ffmpeg = require('fluent-ffmpeg');
+ffmpeg.setFfmpegPath(ffmpegPath);</code></pre></div>
+
+        <p>
+          <code>axios</code> <strong>නෑ</strong> — මේ file එක buffer එකක් ගන්නවා, URL එකක් නෙවෙයි. Video download කරන එක caller
+          එකේ වැඩක්. මේකෙන් <strong>conversion එක විතරයි</strong> කරන්නේ.
+        </p>
+
+        <h3 class="subhead">② Base36 filename — ⭐ අලුත්</h3>
+        <div class="code-block"><button class="copy-btn" data-copy="vid2">Copy</button>
+<pre><code id="vid2">Crypto.randomBytes(6).readUIntLE(0, 6).toString(36) + '.webp'</code></pre></div>
+
+        <div class="callout lime">
+          <div class="callout-title">🔤 Base36 vs Base16 (hex)</div>
+          <p><strong>sticker-utils.js</strong> — <code>.toString('hex')</code> → 12 chars (0-9, a-f)</p>
+          <p><strong>video-utils.js</strong> — <code>.readUIntLE(0,6).toString(36)</code> → <strong>කෙටි</strong>, alphanumeric (0-9, a-z)</p>
+          <p>Base36 = <strong>36 characters</strong> (10 digits + 26 letters) → කෙටි නම්, ලේසියෙන් කියවන්න පුළුවන්.</p>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Method</th><th>Format</th><th>Length</th><th>Sample</th></tr></thead>
+            <tbody>
+              <tr><td><code>randomBytes(6).toString('hex')</code></td><td>Base16</td><td>12</td><td><code>a3f9c2b8e1d4</code></td></tr>
+              <tr><td><code>randomBytes(6).readUIntLE(0,6).toString(36)</code></td><td>Base36</td><td>~8</td><td><code>k9d2mx4q</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          <code>readUIntLE(0, 6)</code> — buffer එකේ offset 0 ඉඳන් 6 bytes කියවලා <strong>unsigned integer</strong> එකක් හදනවා
+          (little-endian). ඊට පස්සේ <code>.toString(36)</code> — base36 string එකකට.
+        </p>
+
+        <div class="callout warn">
+          <div class="callout-title">⚠️ 6 bytes = 48 bits</div>
+          <p><code>readUIntLE(0, 6)</code> — JS Number එකට safe integer limit (53-bit) ඇතුළත. 6 bytes = 48 bits ✅
+          (7 bytes = 56 bits — 53-bit limit එක ඉක්මවනවා, precision loss). ඒ නිසා 6 bytes max ආරක්ෂිතයි.</p>
+        </div>
+
+        <h3 class="subhead">③ video buffer → temp file</h3>
+        <div class="code-block"><button class="copy-btn" data-copy="vid3">Copy</button>
+<pre><code id="vid3">const inputPath = path.join(tmpdir(), name + '.mp4');
+fs.writeFileSync(inputPath, videoBuffer);</code></pre></div>
+        <p>
+          Video buffer එක <code>.mp4</code> file එකකට save කරනවා. FFmpeg = shell tool — buffer එකෙන් කෙලින්ම
+          input දෙන්න බෑ, file එකක් ඕන.
+        </p>
+
+        <h3 class="subhead">④ FFmpeg — core conversion</h3>
+        <div class="code-block"><button class="copy-btn" data-copy="vid4">Copy</button>
+<pre><code id="vid4">ffmpeg(inputPath)
+  .on('error', reject)
+  .on('end', () =&gt; resolve(true))
+  .addOutputOptions([...])
+  .toFormat('webp')
+  .save(outputPath);</code></pre></div>
+
+        <h3 class="subhead">⑤ outputOptions — 8 flags</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Option</th><th>මොකද?</th><th>ඇයි?</th></tr></thead>
+            <tbody>
+              <tr><td><code>-vcodec libwebp</code></td><td>WebP codec</td><td>Animated WebP support</td></tr>
+              <tr><td><code>-vf "scale=..."</code></td><td>Filter chain</td><td>Scale + palette + transparency</td></tr>
+              <tr><td><code>-loop 0</code></td><td>Infinite loop</td><td>Sticker animation</td></tr>
+              <tr><td><code>-ss 00:00:00</code> ⭐</td><td>Start time</td><td>Video කපන තැන (offset)</td></tr>
+              <tr><td><code>-t 00:00:05</code> ⭐</td><td>Duration</td><td>5 seconds max trim</td></tr>
+              <tr><td><code>-preset default</code></td><td>Encoding preset</td><td>Speed/quality balance</td></tr>
+              <tr><td><code>-an</code></td><td>No audio</td><td>Sticker එකට audio ඕන නෑ</td></tr>
+              <tr><td><code>-vsync 0</code></td><td>Timestamp passthrough</td><td>Accuracy</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout lime">
+          <div class="callout-title">⭐ වෙනස්කම් 2ක් (vs sticker-utils.js)</div>
+          <p><strong>-ss 00:00:00</strong> — video එකේ කොහෙන් පටන් ගන්නද? (offset)</p>
+          <p><strong>-t 00:00:05</strong> — කී තත්පරයක් ගන්නද? (duration)</p>
+          <p>මේවා දෙක එකට: "0s ඉඳන් 5s දක්වා" = first 5 seconds. ✂️</p>
+        </div>
+
+        <h3 class="subhead">⑥ Cleanup</h3>
+        <div class="code-block"><button class="copy-btn" data-copy="vid5">Copy</button>
+<pre><code id="vid5">const webpBuffer = fs.readFileSync(outputPath);
+fs.unlinkSync(outputPath);
+fs.unlinkSync(inputPath);
+return webpBuffer;</code></pre></div>
+        <p>Buffer කියවලා, temp files දෙකම delete, buffer return. 🧹</p>
+      </section>
+
+      <!-- Video vs Sticker comparison -->
+      <section id="vid-diff">
+        <h2 class="section-heading lime-accent"><span class="sec-emoji">⚖️</span>video-utils.js vs sticker-utils.js<span class="sec-num">12</span></h2>
+        <p class="section-sub">මේ file එකේ අර එකේ වෙනස්කම් — කවදා මොකක් use කරන්නද?</p>
+
+        <h3 class="subhead">📊 Side-by-side</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Feature</th><th>sticker-utils.js</th><th>video-utils.js</th></tr></thead>
+            <tbody>
+              <tr><td>Main function</td><td><code>gifToSticker()</code></td><td><code>videoToWebp()</code></td></tr>
+              <tr><td>Input types</td><td>GIF buffer</td><td>Video (MP4, WebM, GIF)</td></tr>
+              <tr><td>File extensions</td><td><code>.gif</code> → <code>.webp</code></td><td><code>.mp4</code> → <code>.webp</code></td></tr>
+              <tr><td>Fetcher included</td><td>✅ <code>fetchImage</code>, <code>fetchGif</code></td><td>❌ No (buffer only)</td></tr>
+              <tr><td>Start trim</td><td>❌ No</td><td>✅ <code>-ss 00:00:00</code></td></tr>
+              <tr><td>Duration limit</td><td>❌ No</td><td>✅ <code>-t 00:00:05</code></td></tr>
+              <tr><td>Filename format</td><td>hex (12 chars)</td><td>base36 (~8 chars)</td></tr>
+              <tr><td>FFmpeg filter chain</td><td>✅ Same</td><td>✅ Same</td></tr>
+              <tr><td>WhatsApp limits</td><td>Depends on GIF</td><td>Trimmed to 5s ✅</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="subhead">🎯 කවදා මොකක් use කරන්නද?</h3>
+        <div class="callout success">
+          <div class="callout-title">✅ sticker-utils.js use කරන්න</div>
+          <p>🔹 User <strong>GIF URL</strong> එකක් එව්වම (download + convert එකට)</p>
+          <p>🔹 GIF sticker එකකට size limit එකක් අවශ්‍ය නැත්නම්</p>
+          <p>🔹 Image → sticker (auto-convert) — <code>fetchImage</code> පාවිච්චි කරන්න</p>
+        </div>
+
+        <div class="callout lime">
+          <div class="callout-title">🎥 video-utils.js use කරන්න</div>
+          <p>🔹 User <strong>video (MP4)</strong> එව්වම — sticker එකකට convert කරන්න</p>
+          <p>🔹 Video <strong>දිග වැඩියි</strong> — first 5s විතරයි ඕන</p>
+          <p>🔹 User <strong>quoted video</strong> එකකට reply කරලා sticker හදන්න</p>
+        </div>
+
+        <h3 class="subhead">⚠️ Duplicate concern</h3>
+        <div class="callout warn">
+          <div class="callout-title">⚠️ Filter chain duplicate</div>
+          <p>මේ file දෙකේම <strong>එකම filter chain එක</strong> තියෙනවා. Refactor කරන්න පුළුවන්:</p>
+          <p>මේ config එක <strong>shared module</strong> එකකට (උදා: <code>lib/ffmpeg-config.js</code>) extract කරලා,
+          දෙකෙන්ම import කරන්න. දැනට duplicate — නමුත් වැඩ කරනවා.</p>
+        </div>
+      </section>
+
+      <!-- Usage -->
+      <section id="vid-usage">
+        <h2 class="section-heading lime-accent"><span class="sec-emoji">💡</span>Usage — video-utils.js<span class="sec-num">13</span></h2>
+        <p class="section-sub">Video → WebP sticker conversion — practical examples.</p>
+
+        <h3 class="subhead">1️⃣ Basic — video buffer → sticker</h3>
+        <div class="code-block"><button class="copy-btn" data-copy="vidu1">Copy</button>
+<pre><code id="vidu1">const { videoToWebp } = require('./lib/video-utils');
+
+const videoBuffer = fs.readFileSync('funny.mp4');
+const stickerBuffer = await videoToWebp(videoBuffer);
+
+// stickerBuffer = WebP buffer
+await sock.sendMessage(m.from, { sticker: stickerBuffer });</code></pre></div>
+
+        <h3 class="subhead">2️⃣ WhatsApp Plugin — .tosticker (video reply)</h3>
+        <div class="code-block"><button class="copy-btn" data-copy="vidu2">Copy</button>
+<pre><code id="vidu2">const { videoToWebp } = require('../lib/video-utils');
+
+module.exports = async (sock, m) =&gt; {
+    try {
+        if (!m.quoted) return m.reply('❗ Reply to a video');
+
+        const type = m.quoted.mtype;
+        if (!['videoMessage', 'imageMessage'].includes(type)) {
+            return m.reply('❌ Reply to a video or image');
+        }
+
+        const mediaBuffer = await m.quoted.download();
+        const stickerBuffer = await videoToWebp(mediaBuffer);
+
+        await sock.sendMessage(m.from, {
+            sticker: stickerBuffer
+        }, { quoted: m });
+
+    } catch (err) {
+        console.error(err);
+        m.reply('❌ Sticker creation failed');
+    }
+};</code></pre></div>
+
+        <h3 class="subhead">3️⃣ Trim to specific range (custom)</h3>
+        <p>
+          <code>videoToWebp()</code> එකේ <code>-ss</code> සහ <code>-t</code> hardcoded (0s → 5s). Custom range ඕන නම්
+          function එකට parameters add කරන්න:
+        </p>
+        <div class="code-block"><button class="copy-btn" data-copy="vidu3">Copy</button>
+<pre><code id="vidu3">async function videoToWebpRange(videoBuffer, startTime = '00:00:00', duration = '00:00:05') {
+    const outputPath = path.join(tmpdir(), Crypto.randomBytes(6).toString('hex') + '.webp');
+    const inputPath = path.join(tmpdir(), Crypto.randomBytes(6).toString('hex') + '.mp4');
+
+    fs.writeFileSync(inputPath, videoBuffer);
+
+    await new Promise((resolve, reject) =&gt; {
+        ffmpeg(inputPath)
+            .on('error', reject)
+            .on('end', () =&gt; resolve(true))
+            .addOutputOptions([
+                '-vcodec', 'libwebp',
+                '-vf', "scale='min(320,iw)':min'(320,ih)':force_original_aspect_ratio=decrease,fps=15,pad=320:320:-1:-1:color=white@0.0,split [a][b];[a] palettegen=reserve_transparent=on:transparency_color=ffffff [p];[b][p] paletteuse",
+                '-loop', '0',
+                '-ss', startTime,       // ← custom
+                '-t', duration,          // ← custom
+                '-preset', 'default',
+                '-an',
+                '-vsync', '0'
+            ])
+            .toFormat('webp')
+            .save(outputPath);
+    });
+
+    const webpBuffer = fs.readFileSync(outputPath);
+    fs.unlinkSync(outputPath);
+    fs.unlinkSync(inputPath);
+    return webpBuffer;
+}
+
+// Usage
+const sticker = await videoToWebpRange(videoBuffer, '00:00:02', '00:00:03'); // 2s-5s</code></pre></div>
+
+        <h3 class="subhead">4️⃣ Error handling</h3>
+        <div class="code-block"><button class="copy-btn" data-copy="vidu4">Copy</button>
+<pre><code id="vidu4">try {
+    const sticker = await videoToWebp(videoBuffer);
+    if (!sticker || sticker.length === 0) {
+        throw new Error('Empty sticker buffer');
+    }
+    await sock.sendMessage(m.from, { sticker });
+} catch (err) {
+    console.error('Video→Sticker error:', err.message);
+    m.reply('❌ Could not convert video to sticker');
+}</code></pre></div>
+
+        <h3 class="subhead">🚨 Common Errors</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Error</th><th>හේතුව</th><th>විසඳුම</th></tr></thead>
+            <tbody>
+              <tr><td>FFmpeg error during conversion</td><td>Invalid video / corrupt buffer</td><td>Buffer valid ද බලන්න</td></tr>
+              <tr><td><code>ffmpeg not found</code></td><td><code>@ffmpeg-installer</code> install නෑ</td><td><code>npm install @ffmpeg-installer/ffmpeg</code></td></tr>
+              <tr><td>Sticker too large</td><td>Video bitrate ලොකු</td><td>Video එකේ quality අඩු කරන්න</td></tr>
+              <tr><td>ENOENT no such file</td><td>Temp dir permission</td><td>Permissions check</td></tr>
+              <tr><td>Empty output</td><td>Video <code>-ss</code> offset වැරදියි</td><td>Video duration check කරන්න</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="subhead">⚡ Performance Tips</h3>
+        <div class="callout lime">
+          <div class="callout-title">🚀 Speed එක වැඩි කරන්න</div>
+          <p>🔹 <strong>Duration limit</strong> — <code>-t 00:00:03</code> (3s) — 5s ට වඩා 40% faster</p>
+          <p>🔹 <strong>Lower fps</strong> — <code>fps=10</code> — animation smoothness අඩු නමුත් file කුඩා</p>
+          <p>🔹 <strong>Preset faster</strong> — <code>-preset ultrafast</code> — quality අඩු, speed 2x</p>
+          <p>🔹 <strong>Video size check</strong> — buffer 5MB+ නම් first කපන්න</p>
+        </div>
+
+        <div class="callout lime">
+          <div class="callout-title">🎉 ඔච්චරයි!</div>
           <p>
-            මේ file එක as-is copy කරන්න පුළුවන් — වෙනස්කම් අවශ්‍ය නෑ. නමුත් <code>sequelize</code>
-            සහ <code>sqlite3</code> (හෝ <code>pg</code>) install කරලා තියෙන්න ඕන. <a href="#install">Installation</a>
-            section එක බලන්න.
+            <code>lib/video-utils.js</code> documentation එක ඉවරයි. දැන් ඔයාට <strong>video → WebP sticker</strong>
+            conversion, duration trim, සහ sticker-utils එක්ක වෙනස සම්පූර්ණයෙන්ම තේරෙනවා. 🎥
           </p>
         </div>
       </section>
 
-      <!-- ============ QUICK START ============ -->
-      <section id="quickstart">
-        <h2 class="section-heading">
-          <span class="sec-emoji">⚡</span>
-          Quick Start
-          <span class="sec-num">02</span>
-        </h2>
-        <p class="section-sub">Get running in under 2 minutes.</p>
-
-        <div class="section-sub-si">
-          🚀 <strong>ඉක්මනින්ම පටන් ගන්න:</strong> පියවර 3කින් වැඩේ කරගන්න. පළමුව packages install කරන්න,
-          ඊට පස්සේ <code>.env</code> file එකේ database URL එක දාන්න, අන්තිමට කේතයේ <code>DATABASE</code>
-          object එක require කරලා පාවිච්චි කරන්න.
-        </div>
-
-        <div class="quick-grid">
-          <div class="quick-card">
-            <div class="quick-emoji">📦</div>
-            <div class="quick-step">1</div>
-            <h4>Install packages</h4>
-            <p><code>npm install</code> එකෙන් අවශ්‍ය dependencies install කරගන්න.</p>
-          </div>
-          <div class="quick-card">
-            <div class="quick-emoji">⚙️</div>
-            <div class="quick-step">2</div>
-            <h4>Configure .env</h4>
-            <p><code>DATABASE_URL</code> දාන්න — නැත්නම් SQLite automatic.</p>
-          </div>
-          <div class="quick-card">
-            <div class="quick-emoji">🎯</div>
-            <div class="quick-step">3</div>
-            <h4>Require & use</h4>
-            <p><code>DATABASE</code> import කරලා models ලියන්න පටන් ගන්න.</p>
-          </div>
-        </div>
-
-        <h3 class="subhead">✅ Connection එක test කරන්න</h3>
-        <p>
-          Database connection එක හරිද කියලා බලන්න මේ සරල code එක run කරන්න. Success නම්
-          "✅ DB connected" print වෙනවා — error නම් හේතුව print වෙනවා.
-        </p>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="qs1">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-            </svg>
-            Copy
-          </button>
-<pre><code id="qs1">const { DATABASE } = require('./lib/database');
-
-DATABASE.authenticate()
-    .then(() =&gt; console.log('✅ DB connected'))
-    .catch(err =&gt; console.error('❌ DB error:', err));</code></pre>
-        </div>
-      </section>
-
-      <!-- ============ INSTALLATION ============ -->
-      <section id="install">
-        <h2 class="section-heading">
-          <span class="sec-emoji">📦</span>
-          Installation
-          <span class="sec-num">03</span>
-        </h2>
-        <p class="section-sub">Choose the dependencies for your stack.</p>
-
-        <div class="section-sub-si">
-          📥 <strong>මොන packages install කරන්නද?</strong> ඔයා SQLite විතරයි පාවිච්චි කරනවා නම් පළමු
-          command එක. Production එකට Postgres පාවිච්චි කරනවා නම් දෙවෙනි command එක යොදන්න.
-          <code>pg</code> = Postgres driver, <code>pg-hstore</code> = data serialize helper.
-        </div>
-
-        <h3 class="subhead">🗄️ SQLite විතරයි (development)</h3>
-        <p>Local development එකට හොඳම තේරීම. File එකක් විතරයි — server එකක් ඕන නෑ.</p>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="i1">Copy</button>
-<pre><code id="i1">npm install sequelize sqlite3</code></pre>
-        </div>
-
-        <h3 class="subhead">🌐 Postgres (production)</h3>
-        <p>Cloud database එකකට connect වෙන්න. Neon, Supabase, Railway වගේ services වලට.</p>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="i2">Copy</button>
-<pre><code id="i2">npm install sequelize sqlite3 pg pg-hstore</code></pre>
-        </div>
-
-        <h3 class="subhead">📁 නිර්දේශිත folder structure</h3>
-        <p>ඔයාගේ project එකේ folder structure එක මේ විදියට තියෙන්න ඕන:</p>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="i3">Copy</button>
-<pre><code id="i3">your-bot/
-├── lib/
-│   └── database.js        ← this file
-├── store.js
-├── index.js
-├── .env
-├── package.json
-└── database.db            ← auto-created (SQLite)</code></pre>
-        </div>
-      </section>
-
-      <!-- ============ CONFIGURATION ============ -->
-      <section id="config">
-        <h2 class="section-heading">
-          <span class="sec-emoji">⚙️</span>
-          Configuration
-          <span class="sec-num">04</span>
-        </h2>
-        <p class="section-sub">
-          All configuration lives in a single environment variable: <code>DATABASE_URL</code>.
-        </p>
-
-        <div class="section-sub-si">
-          🔧 <strong>මොනවද configure කරන්නේ?</strong> එකම එක variable එකයි — <code>DATABASE_URL</code>.
-          ඒක <code>.env</code> file එකේ දාන්න. හිස් නම් → SQLite automatic. Postgres URL එකක් නම් → Postgres.
-          මේක තමයි මුළු configuration එකේ රහස! 🤫
-        </div>
-
-        <div class="callout info">
-          <div class="callout-title">ℹ️ කොහොමද වැඩ කරන්නේ</div>
-          <p>🔹 <code>DATABASE_URL</code> <strong>set නැත්නම්</strong> → SQLite (<code>./database.db</code>)</p>
-          <p>🔹 <code>DATABASE_URL</code> <strong>Postgres URL එකක් නම්</strong> → Postgres + SSL</p>
-        </div>
-
-        <h3 class="subhead">🗄️ SQLite (Development)</h3>
-        <p>Local development එකට. File එකක් විතරයි — ලේසි, ඉක්මන්, setup ඕන නෑ.</p>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="c-env1">Copy</button>
-<pre><code id="c-env1">DATABASE_URL=./database.db</code></pre>
-        </div>
-
-        <h3 class="subhead">🌐 Postgres — Neon</h3>
-        <p>Neon.tech වලින් free Postgres database එකක් ගන්න පුළුවන්. <code>sslmode=require</code> අනිවාර්යයි.</p>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="c-env2">Copy</button>
-<pre><code id="c-env2">DATABASE_URL=postgres://user:password@ep-xxx.neon.tech/neondb?sslmode=require</code></pre>
-        </div>
-
-        <h3 class="subhead">🌐 Postgres — Supabase</h3>
-        <p>Supabase.io — free tier එකේ 500MB database එකක් ලැබෙනවා.</p>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="c-env3">Copy</button>
-<pre><code id="c-env3">DATABASE_URL=postgres://postgres:password@db.xxx.supabase.co:5432/postgres</code></pre>
-        </div>
-
-        <h3 class="subhead">🌐 Postgres — Railway</h3>
-        <p>Railway.app — මාසෙට $5 free credit එකක් එක්ක.</p>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="c-env4">Copy</button>
-<pre><code id="c-env4">DATABASE_URL=postgresql://postgres:password@containers-us-west-xxx.railway.app:5432/railway</code></pre>
-        </div>
-
-        <h3 class="subhead">🖥️ Postgres — Local</h3>
-        <p>ඔයාගේ computer එකේ Postgres install කරලා තියෙනවා නම්:</p>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="c-env5">Copy</button>
-<pre><code id="c-env5">DATABASE_URL=postgres://postgres:password@localhost:5432/mydb</code></pre>
-        </div>
-      </section>
-
-      <!-- ============ EXPLAINED ============ -->
-      <section id="explained">
-        <h2 class="section-heading">
-          <span class="sec-emoji">🔍</span>
-          Line-by-Line
-          <span class="sec-num">05</span>
-        </h2>
-        <p class="section-sub">Every line of the source, explained step by step.</p>
-
-        <div class="section-sub-si">
-          🧑‍🏫 <strong>මේ section එක තමයි හදවත.</strong> මෙතන source code එකේ හැම කොටසක්ම වෙන වෙනම ගෙනලා,
-          ඒක <strong>මොකටද</strong>, <strong>කොහොමද වැඩ කරන්නේ</strong>, <strong>ඇයි එහෙම ලියලා තියෙන්නේ</strong>
-          කියලා සිංහලෙන් පැහැදිලි කරලා තියෙනවා. ඉගෙනගන්න හොඳම තැන මේකයි. 👇
-        </div>
-
-        <!-- ① -->
-        <h3 class="subhead">① Sequelize Import</h3>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="e1">Copy</button>
-<pre><code id="e1">const Sequelize = require('sequelize');</code></pre>
-        </div>
-        <p>
-          මේකෙන් <code>sequelize</code> කියන npm package එක load කරනවා. <strong>Sequelize = Node.js ORM
-          එකක්</strong>. ඒ කියන්නේ SQL query ලියන්නේ නැතුව, JavaScript වලින්ම database එක handle කරන්න පුළුවන්.
-          උදාහරණයක් විදියට <code>Contact.findAll()</code> කියලා ලියනවා — Sequelize එකෙන් ඒක
-          <code>SELECT * FROM Contacts</code> විදියට translate කරනවා. 🎩
-        </p>
-
-        <!-- ② -->
-        <h3 class="subhead">② Singleton Instance Variable</h3>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="e2">Copy</button>
-<pre><code id="e2">static instance = null;</code></pre>
-        </div>
-        <p>
-          මේකෙන් අර්ථවත් වෙන්නේ, <strong>connection එක තියාගන්න</strong> එකම එක variable එකක් හදනවා කියන එකයි.
-          පටන් ගන්නකොට <code>null</code> විදියට තියෙනවා — ඒ කියන්නේ "තාම connection එකක් හදලා නෑ".
-          පළමු වතාවට require කරද්දී මේක පිරෙනවා, දෙවෙනි වතාවට ඒකම ආපහු use කරනවා.
-        </p>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>කොටස</th><th>අර්ථය</th></tr></thead>
-            <tbody>
-              <tr><td><code>static</code></td><td>Class එකට අයිති — instance එකට නෙවෙයි</td></tr>
-              <tr><td><code>instance</code></td><td>Connection එක තියෙන variable name එක</td></tr>
-              <tr><td><code>= null</code></td><td>මුලින්ම හිස් — connection නෑ</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- ③ -->
-        <h3 class="subhead">③ Get Instance Method — හදවත ❤️</h3>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="e3">Copy</button>
-<pre><code id="e3">static getInstance() {
-    if (!DatabaseManager.instance) {
-        // ... create connection
-    }
-    return DatabaseManager.instance;
-}</code></pre>
-        </div>
-        <p>
-          මේක තමයි <strong>singleton pattern</strong> එකේ මූලික අදහස. පළමු වතාවට call කරද්දී
-          <code>instance = null</code> නිසා block එකට ඇතුල් වෙලා connection එකක් හදනවා. දෙවෙනි, තුන්වෙනි
-          වතාවලට call කරද්දී instance එක දැනටමත් තියෙන නිසා ඒකම return කරනවා — අලුත් connection
-          හදන්නේ නෑ.
-        </p>
-        <div class="callout success">
-          <div class="callout-title">✅ ඇයි මේක වැදගත්?</div>
-          <p>🔹 <strong>Call 1:</strong> <code>null</code> → අලුත් connection create</p>
-          <p>🔹 <strong>Call 2, 3, 4…:</strong> ඒකම connection එක return</p>
-          <p>🔹 <strong>ප්‍රතිඵලය:</strong> memory leak නෑ, එකම DB handle එක, SQLite lock errors නෑ</p>
-        </div>
-
-        <!-- ④ -->
-        <h3 class="subhead">④ Environment Variable Check</h3>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="e4">Copy</button>
-<pre><code id="e4">const DATABASE_URL = process.env.DATABASE_URL || './database.db';</code></pre>
-        </div>
-        <p>
-          මේ line එකෙන් තීරණය කරනවා <strong>SQLite ද Postgres ද</strong> කියලා. <code>process.env</code>
-          කියන්නේ operating system එකේ environment variables. <code>||</code> කියන්නේ "හිස් නම් fallback එක ගන්න"
-          කියන එක. ඉතින් <code>DATABASE_URL</code> env var එකේ නැත්නම් default <code>./database.db`</code>
-          use කරනවා.
-        </p>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Situation</th><th>DATABASE_URL</th><th>Database</th></tr></thead>
-            <tbody>
-              <tr><td>env var set නෑ</td><td><code>./database.db</code></td><td>🗄️ SQLite</td></tr>
-              <tr><td>env var = <code>postgres://…</code></td><td><code>postgres://…</code></td><td>🌐 Postgres</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <!-- ⑤ -->
-        <h3 class="subhead">⑤ SQLite Configuration</h3>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="e5">Copy</button>
-<pre><code id="e5">new Sequelize({
-    dialect: 'sqlite',
-    storage: DATABASE_URL,
-    logging: false,
-})</code></pre>
-        </div>
-        <p>
-          SQLite = <strong>file-based database</strong>. <code>storage</code> එකේ දෙන path එකේ
-          <code>./database.db</code> file එක automatically හැදෙනවා. <code>logging: false</code> නිසා
-          console එකේ SQL queries print වෙන්නේ නෑ — console එක clean. 🧹
-        </p>
-
-        <!-- ⑥ -->
-        <h3 class="subhead">⑥ Postgres Configuration</h3>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="e6">Copy</button>
-<pre><code id="e6">new Sequelize(DATABASE_URL, {
-    dialect: 'postgres',
-    ssl: true,
-    protocol: 'postgres',
-    dialectOptions: {
-        native: true,
-        ssl: { require: true, rejectUnauthorized: false },
-    },
-    logging: false,
-})</code></pre>
-        </div>
-        <p>
-          Postgres = server-based database. <code>ssl: true</code> කියන්නේ encrypted connection එකක්.
-          <code>rejectUnauthorized: false</code> වැදගත් — cloud DB providers (Neon, Supabase, Railway)
-          ගොඩක් <strong>self-signed SSL certificates</strong> පාවිච්චි කරනවා, ඒවා Node.js default
-          reject කරන නිසා මේක <code>false</code> කරන්න ඕන.
-        </p>
-        <div class="callout warn">
-          <div class="callout-title">⚠️ rejectUnauthorized: false ගැන</div>
-          <p>මේක security අඩු කරනවා (MITM attack risk), නමුත් cloud DB සමඟ වැඩ කරන්න අවශ්‍යයි.
-          Production එකට CA certificate එක manually add කරන එක වඩා හොඳයි.</p>
-        </div>
-
-        <!-- ⑦ -->
-        <h3 class="subhead">⑦ Sync Database</h3>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="e7">Copy</button>
-<pre><code id="e7">DATABASE.sync()
-    .then(() =&gt; {
-        console.log('Database synchronized successfully.');
-    })
-    .catch((error) =&gt; {
-        console.error('Error synchronizing the database:', error);
-    });</code></pre>
-        </div>
-        <p>
-          <code>sync()</code> කියන්නේ tables <strong>auto-create</strong> කරන එක. Models define
-          කරලා තිබ්බොත්, ඒවාට අදාළ tables හදනවා. <code>.then()</code> = success, <code>.catch()</code> = error
-          එකක් ආවොත්. මේක Promise එකක් නිසා async විදියට run වෙනවා.
-        </p>
-        <div class="callout danger">
-          <div class="callout-title">🚨 ලොකු ප්‍රශ්නයක් — await නෑ!</div>
-          <p><code>sync()</code> කියන එක <strong>await කරන්නේ නෑ</strong>. ඒ නිසා sync එක ඉවර වෙන්න කලින්
-          queries දාන්න ගියොත් → <strong>"Table doesn't exist"</strong> error එකක් එනවා.</p>
-          <p><strong>විසඳුම:</strong> ඔයාගේ bot startup එකේදී <code>await DATABASE.sync()</code> කියලා call කරන්න.</p>
-        </div>
-
-        <!-- ⑧ -->
-        <h3 class="subhead">⑧ Export</h3>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="e8">Copy</button>
-<pre><code id="e8">module.exports = { DATABASE };</code></pre>
-        </div>
-        <p>
-          මේකෙන් <code>DATABASE</code> object එක export කරනවා — අනිත් files වලට <code>require()</code>
-          කරලා use කරන්න පුළුවන්. <strong>වැදගත්:</strong> <code>{ }</code> ඇතුළේ තියෙන නිසා object එකක්
-          විදියට export වෙනවා.
-        </p>
-        <p>Import කරන්නේ මෙහෙමයි (destructuring):</p>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="e8b">Copy</button>
-<pre><code id="e8b">const { DATABASE } = require('./lib/database');</code></pre>
-        </div>
-      </section>
-
-      <!-- ============ FLOW ============ -->
-      <section id="flow">
-        <h2 class="section-heading">
-          <span class="sec-emoji">🔄</span>
-          How It Works
-          <span class="sec-num">06</span>
-        </h2>
-        <p class="section-sub">The full execution flow when the bot starts.</p>
-
-        <div class="section-sub-si">
-          🎬 <strong>Bot එක start වෙද්දී මොකද වෙන්නේ?</strong> මේ diagram එකේ step-by-step පේනවා —
-          <code>node index.js</code> ඉඳන් bot ready වෙනකන් සිදුවෙන හැම දේම.
-        </div>
-
-        <div class="code-block">
-          <button class="copy-btn" data-copy="flow1">Copy</button>
-<pre><code id="flow1">Step 1: node index.js
-    ↓
-Step 2: index.js → require('./lib/database')
-    ↓
-Step 3: database.js executes
-    ├── import Sequelize
-    ├── define DatabaseManager class
-    ├── call getInstance()
-    │   ├── instance = null → CREATE
-    │   ├── read DATABASE_URL
-    │   │   ├── missing → SQLite
-    │   │   └── present → Postgres
-    │   └── new Sequelize(...)
-    ├── DATABASE = instance
-    ├── DATABASE.sync() [async]
-    └── module.exports = { DATABASE }
-    ↓
-Step 4: index.js → require('./store')
-    ↓
-Step 5: store.js → require('./lib/database')
-    └── cached → same instance ✅
-    ↓
-Step 6: Bot ready ✅</code></pre>
-        </div>
-      </section>
-
-      <!-- ============ API REFERENCE ============ -->
-      <section id="api">
-        <h2 class="section-heading">
-          <span class="sec-emoji">📚</span>
-          API Reference
-          <span class="sec-num">07</span>
-        </h2>
-        <p class="section-sub">What you can do with the exported <code>DATABASE</code> object.</p>
-
-        <div class="section-sub-si">
-          🛠️ <strong>DATABASE object එකෙන් මොනවද කරන්න පුළුවන්?</strong> පහත table එකේ ප්‍රධාන
-          methods ඔක්කොම තියෙනවා. ඒවා Sequelize එකේ standard methods.
-        </div>
-
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Method</th><th>කරන දේ</th></tr></thead>
-            <tbody>
-              <tr><td><code>DATABASE.define(name, schema)</code></td><td>Model (table) එකක් define කරන්න</td></tr>
-              <tr><td><code>DATABASE.sync()</code></td><td>Tables create/update කරන්න</td></tr>
-              <tr><td><code>DATABASE.sync({ alter: true })</code></td><td>Schema update (dev only)</td></tr>
-              <tr><td><code>DATABASE.sync({ force: true })</code></td><td>Drop + recreate ⚠️ data loss</td></tr>
-              <tr><td><code>DATABASE.query('SELECT …')</code></td><td>Raw SQL run කරන්න</td></tr>
-              <tr><td><code>DATABASE.transaction(fn)</code></td><td>Transaction ඇතුළේ run</td></tr>
-              <tr><td><code>DATABASE.authenticate()</code></td><td>Connection test</td></tr>
-              <tr><td><code>DATABASE.close()</code></td><td>Connection close</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- ============ EXAMPLES ============ -->
-      <section id="examples">
-        <h2 class="section-heading">
-          <span class="sec-emoji">💡</span>
-          Usage Examples
-          <span class="sec-num">08</span>
-        </h2>
-        <p class="section-sub">Real-world patterns you'll use every day.</p>
-
-        <div class="section-sub-si">
-          🎯 <strong>ප්‍රායෝගික උදාහරණ:</strong> මේවා තමයි දිනපතා භාවිතා කරන pattern. ඔයාගේ bot එකේ
-          contacts, messages, groups save කරන්න මේ code එකම භාවිතා කරන්න පුළුවන්.
-        </div>
-
-        <h3 class="subhead">1️⃣ Model එකක් define කරන්න</h3>
-        <p>මේකෙන් "Contact" කියලා table එකක් හදනවා. <code>jid</code> = primary key, <code>name</code> = optional field.</p>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="u1">Copy</button>
-<pre><code id="u1">const { DATABASE } = require('../lib/database');
-const { DataTypes } = require('sequelize');
-
-const Contact = DATABASE.define('Contact', {
-    jid:  { type: DataTypes.STRING, primaryKey: true },
-    name: { type: DataTypes.STRING, allowNull: true },
-});
-
-module.exports = Contact;</code></pre>
-        </div>
-
-        <h3 class="subhead">2️⃣ Data save / load කරන්න</h3>
-        <p><code>upsert</code> = insert හෝ update. <code>findOne</code> = එකක් හොයන්න.</p>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="u2">Copy</button>
-<pre><code id="u2">// Save
-await Contact.upsert({ jid, name });
-
-// Load
-const contact = await Contact.findOne({ where: { jid } });
-const name = contact ? contact.name : jid.split('@')[0];</code></pre>
-        </div>
-
-        <h3 class="subhead">3️⃣ Transaction එකක්</h3>
-        <p>දෙකක් එකට success වෙන්න ඕන නම් — එකක් fail වුණොත් දෙකම rollback වෙනවා.</p>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="u3">Copy</button>
-<pre><code id="u3">return await DATABASE.transaction(async (t) =&gt; {
-    await Message.create({ jid: from, ...msg }, { transaction: t });
-    await Message.create({ jid: to,   ...msg }, { transaction: t });
-});</code></pre>
-        </div>
-
-        <h3 class="subhead">4️⃣ Startup එකේ sync එක await කරන්න</h3>
-        <p>මේක තමයි <strong>recommended</strong> විදිය. Bot start වෙන්න කලින් DB ready කරගන්න.</p>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="u4">Copy</button>
-<pre><code id="u4">async function startBot() {
-    const { DATABASE } = require('./lib/database');
-    await DATABASE.sync();
-    console.log('DB ready ✅');
-    await startWhatsApp();
-}
-
-startBot().catch(console.error);</code></pre>
-        </div>
-      </section>
-
-      <!-- ============ COMPARE ============ -->
-      <section id="compare">
-        <h2 class="section-heading">
-          <span class="sec-emoji">📊</span>
-          SQLite vs Postgres
-          <span class="sec-num">09</span>
-        </h2>
-        <p class="section-sub">Which one should you use?</p>
-
-        <div class="section-sub-si">
-          🤔 <strong>මොකක්ද තෝරාගන්නේ?</strong> Development එකට SQLite හොඳයි — ලේසි, fast, free.
-          Production එකට Postgres හොඳයි — scale කරන්න පුළුවන්, safe, concurrent. පහත table එකේ
-          සම්පූර්ණ comparison එක තියෙනවා.
-        </div>
-
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Feature</th><th>SQLite</th><th>Postgres</th></tr></thead>
-            <tbody>
-              <tr><td>Setup</td><td>✅ ලේසි (file)</td><td>⚠️ Server ඕන</td></tr>
-              <tr><td>Speed (small data)</td><td>✅ Fast</td><td>✅ Fast</td></tr>
-              <tr><td>Speed (large data)</td><td>❌ Slow</td><td>✅ Fast</td></tr>
-              <tr><td>Concurrent writes</td><td>❌ දුර්වල</td><td>✅ ශක්තිමත්</td></tr>
-              <tr><td>Backup</td><td>✅ File copy</td><td>⚠️ pg_dump</td></tr>
-              <tr><td>Cost</td><td>✅ Free</td><td>Free tier / paid</td></tr>
-              <tr><td>හොඳම එක</td><td>Development</td><td>Production</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="callout success">
-          <div class="callout-title">🎯 මගේ නිර්දේශය</div>
-          <p>🔸 <strong>Development / personal bot</strong> → SQLite (setup එක 10 තත්පරයි)</p>
-          <p>🔸 <strong>Production / many users</strong> → Postgres (data loss risk අඩු)</p>
-        </div>
-      </section>
-
-      <!-- ============ TROUBLESHOOTING ============ -->
-      <section id="troubleshoot">
-        <h2 class="section-heading">
-          <span class="sec-emoji">🐛</span>
-          Troubleshooting
-          <span class="sec-num">10</span>
-        </h2>
-        <p class="section-sub">Common errors and their fixes.</p>
-
-        <div class="section-sub-si">
-          🔧 <strong>Error එකක් ආවද?</strong> පහත බලන්න — බහුලව එන errors ටික සහ ඒවා fix කරන විදිය.
-          ඔයාගේ error එක මෙතන නැත්නම්, console එකේ message එක copy කරලා search කරන්න.
-        </div>
-
-        <h3 class="subhead">❌ Please install sqlite3 package manually</h3>
-        <p>හේතුව: <code>sqlite3</code> install කරලා නෑ. විසඳුම:</p>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="t1">Copy</button>
-<pre><code id="t1">npm install sqlite3</code></pre>
-        </div>
-
-        <h3 class="subhead">❌ Cannot find module 'pg'</h3>
-        <p>හේතුව: Postgres driver install කරලා නෑ. විසඳුම:</p>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="t2">Copy</button>
-<pre><code id="t2">npm install pg pg-hstore</code></pre>
-        </div>
-
-        <h3 class="subhead">❌ Table doesn't exist</h3>
-        <p><strong>හේතුව:</strong> <code>sync()</code> await කරලා නෑ — queries යන්නේ table හැදෙන්න කලින්.</p>
-        <p><strong>විසඳුම:</strong></p>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="t3">Copy</button>
-<pre><code id="t3">await DATABASE.sync();
-// then run your queries</code></pre>
-        </div>
-
-        <h3 class="subhead">❌ SQLITE_BUSY: database is locked</h3>
-        <p><strong>හේතුව:</strong> Multiple connections හෝ concurrent writes. Singleton pattern (මේ file එකේ තියෙනවා) use කරන්න හෝ Postgres වලට migrate කරන්න.</p>
-
-        <h3 class="subhead">❌ Self signed certificate error</h3>
-        <p><strong>විසඳුම:</strong> <code>dialectOptions</code> එකේ <code>ssl: { require: true, rejectUnauthorized: false }</code> තියෙනවද බලන්න.</p>
-      </section>
-
-      <!-- ============ FAQ ============ -->
-      <section id="faq">
-        <h2 class="section-heading">
-          <span class="sec-emoji">❓</span>
-          FAQ
-          <span class="sec-num">11</span>
-        </h2>
-        <p class="section-sub">සිංහලෙන් නිතර අසන ප්‍රශ්න.</p>
-
-        <h3 class="subhead">MySQL පාවිච්චි කරන්න පුළුවන්ද?</h3>
-        <p>ඔව් ✅ — <code>dialect: 'postgres'</code> වෙනුවට <code>'mysql'</code> දාලා, <code>mysql2</code> package එක install කරන්න. ඉතුරු code එක එහෙමම වැඩ කරනවා.</p>
-
-        <h3 class="subhead">ඇයි singleton pattern පාවිච්චි කරන්නේ?</h3>
-        <p>Singleton නැත්නම්, හැම <code>require()</code> එකකින්ම අලුත් connection එකක් හැදෙනවා. ඔයාගේ project එකේ files 10ක් මේක import කරනවා නම් → <strong>connections 10ක්</strong> → memory leak + SQLite lock errors. Singleton එකෙන් එකම instance එක guarantee කරනවා.</p>
-
-        <h3 class="subhead">database.db file එක git එකට commit කරන්න ඕනද?</h3>
-        <p>නෑ ❌. Database එකේ user data තියෙනවා — git එකට යවන්නේ නැතුව <code>.gitignore</code> එකට add කරන්න:</p>
-        <div class="code-block">
-          <button class="copy-btn" data-copy="faq1">Copy</button>
-<pre><code id="faq1">database.db
-database.db-journal
-.env
-node_modules/</code></pre>
-        </div>
-
-        <h3 class="subhead">Netlify එකේ run කරන්න පුළුවන්ද?</h3>
-        <p>මේ file එක <strong>Node.js server</strong> එකක run වෙනවා — Netlify static hosting එකේ නෙවෙයි. නමුත් <strong>මේ documentation site එක</strong> Netlify, Vercel, GitHub Pages, Cloudflare Pages — ඕන එකකට host කරන්න පුළුවන්.</p>
-      </section>
-
-      <!-- ============ FOOTER ============ -->
+      <!-- FOOTER -->
       <footer class="footer">
         <div class="footer-grid">
           <div>
             <div class="footer-brand">📘 PathumTech Docs</div>
             <p class="footer-desc">
-              <code>lib/database.js</code> module එකේ සම්පූර්ණ documentation සිංහල පැහැදිලි කිරීම් සමඟ.
-              WhatsApp bot developers ලා සඳහා නිර්මාණය කරන ලද්දක්.
+              <code>lib/</code> modules 10 සඳහා සිංහල පැහැදිලි කිරීම් සහිත සම්පූර්ණ documentation.
             </p>
           </div>
           <div>
-            <h5>📚 Docs</h5>
-            <ul>
-              <li><a href="#overview">🎯 Overview</a></li>
-              <li><a href="#quickstart">⚡ Quick Start</a></li>
-              <li><a href="#explained">🔍 Explained</a></li>
-            </ul>
+            <h5>🗄️ M1·🎨M2·🎬M3</h5>
+            <ul><li><a href="#overview">database</a></li><li><a href="#emix-overview">emix</a></li><li><a href="#gif-overview">fetchGif</a></li></ul>
           </div>
           <div>
-            <h5>🆘 Help</h5>
-            <ul>
-              <li><a href="#troubleshoot">🐛 Troubleshooting</a></li>
-              <li><a href="#faq">❓ FAQ</a></li>
-              <li><a href="#api">📚 API Reference</a></li>
-            </ul>
+            <h5>🛠️M4·📦M5·🍃M6</h5>
+            <ul><li><a href="#fn-overview">functions</a></li><li><a href="#lib-overview">index</a></li><li><a href="#mongo-overview">mongo</a></li></ul>
+          </div>
+          <div>
+            <h5>📨M7·🔌M8</h5>
+            <ul><li><a href="#msg-overview">msg</a></li><li><a href="#pl-overview">pluginLoader</a></li></ul>
+          </div>
+          <div>
+            <h5>🎨M9·🎥M10</h5>
+            <ul><li><a href="#st-overview">sticker</a></li><li><a href="#vid-overview">video</a></li></ul>
           </div>
         </div>
         <div class="footer-bottom">
-          📚 README — <code>lib/database.js</code> · PathumTech bot project · © 2025
+          📚 lib Modules — 10 modules · PathumTech · © 2025
         </div>
       </footer>
 
@@ -1674,133 +940,64 @@ node_modules/</code></pre>
   </main>
 </div>
 
-<!-- ============ BACK TO TOP ============ -->
 <button class="back-to-top" id="backTop" aria-label="Back to top">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-    <polyline points="18 15 12 9 6 15"></polyline>
-  </svg>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
 </button>
 
-<!-- ============ TOAST ============ -->
 <div class="toast" id="toast">✅ Copied!</div>
 
 <script>
 (function () {
   'use strict';
-
-  /* ============ TOAST ============ */
   var toast = document.getElementById('toast');
-  function showToast(msg) {
-    toast.textContent = msg || '✅ Copied!';
-    toast.classList.add('show');
-    clearTimeout(showToast._t);
-    showToast._t = setTimeout(function () { toast.classList.remove('show'); }, 1800);
-  }
-
-  /* ============ COPY ============ */
+  function showToast(msg) { toast.textContent = msg || '✅ Copied!'; toast.classList.add('show'); clearTimeout(showToast._t); showToast._t = setTimeout(function () { toast.classList.remove('show'); }, 1800); }
   function copyToClipboard(text) {
     return new Promise(function (resolve) {
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text)
-          .then(function () { resolve(true); })
-          .catch(function () { resolve(fallbackCopy(text)); });
-      } else {
-        resolve(fallbackCopy(text));
-      }
+        navigator.clipboard.writeText(text).then(function () { resolve(true); }).catch(function () { resolve(fallbackCopy(text)); });
+      } else { resolve(fallbackCopy(text)); }
     });
   }
-
   function fallbackCopy(text) {
     var ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.top = '-9999px';
-    ta.setAttribute('readonly', '');
-    document.body.appendChild(ta);
+    ta.value = text; ta.style.position = 'fixed'; ta.style.top = '-9999px';
+    ta.setAttribute('readonly', ''); document.body.appendChild(ta);
     var ok = false;
-    try {
-      ta.select();
-      ta.setSelectionRange(0, text.length);
-      ok = document.execCommand('copy');
-    } catch (e) { ok = false; }
-    document.body.removeChild(ta);
-    return ok;
+    try { ta.select(); ta.setSelectionRange(0, text.length); ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    document.body.removeChild(ta); return ok;
   }
-
-  /* ============ SYNTAX HIGHLIGHT ============ */
-  function escapeHtml(s) {
-    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  }
-
-  var KEYWORDS = [
-    'const','let','var','class','static','new','if','else','return',
-    'async','await','function','try','catch','throw','typeof','instanceof',
-    'this','true','false','null','undefined','import','from','export','default'
-  ];
-
+  function escapeHtml(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  var KEYWORDS = ['const','let','var','class','static','new','if','else','return','async','await','function','try','catch','throw','typeof','instanceof','this','true','false','null','undefined','import','from','export','default','for','of','while','module','require','in','switch','case','break','continue'];
   function highlight(code) {
     var out = '', i = 0, n = code.length;
     while (i < n) {
       var ch = code[i], next = code[i + 1];
-
-      if (ch === '/' && next === '/') {
-        var endC = code.indexOf('\n', i);
-        if (endC === -1) endC = n;
-        out += '<span class="c">' + escapeHtml(code.slice(i, endC)) + '</span>';
-        i = endC;
-        continue;
-      }
-
+      if (ch === '/' && next === '/') { var endC = code.indexOf('\n', i); if (endC === -1) endC = n; out += '<span class="c">' + escapeHtml(code.slice(i, endC)) + '</span>'; i = endC; continue; }
+      if (ch === '/' && next === '*') { var endB = code.indexOf('*/', i + 2); endB = endB === -1 ? n : endB + 2; out += '<span class="c">' + escapeHtml(code.slice(i, endB)) + '</span>'; i = endB; continue; }
       if (ch === '"' || ch === "'" || ch === '`') {
         var quote = ch, endS = i + 1;
-        while (endS < n && code[endS] !== quote) {
-          if (code[endS] === '\\') endS++;
-          endS++;
-        }
+        while (endS < n && code[endS] !== quote) { if (code[endS] === '\\') endS++; endS++; }
         endS = Math.min(endS + 1, n);
-        out += '<span class="s">' + escapeHtml(code.slice(i, endS)) + '</span>';
-        i = endS;
-        continue;
+        out += '<span class="s">' + escapeHtml(code.slice(i, endS)) + '</span>'; i = endS; continue;
       }
-
       if (/[a-zA-Z_$]/.test(ch)) {
-        var endW = i;
-        while (endW < n && /[a-zA-Z0-9_$]/.test(code[endW])) endW++;
+        var endW = i; while (endW < n && /[a-zA-Z0-9_$]/.test(code[endW])) endW++;
         var word = code.slice(i, endW);
-        if (KEYWORDS.indexOf(word) !== -1) {
-          out += '<span class="k">' + word + '</span>';
-        } else {
-          out += escapeHtml(word);
-        }
-        i = endW;
-        continue;
+        out += KEYWORDS.indexOf(word) !== -1 ? '<span class="k">' + word + '</span>' : escapeHtml(word);
+        i = endW; continue;
       }
-
-      if (/[0-9]/.test(ch)) {
-        var endN = i;
-        while (endN < n && /[0-9.]/.test(code[endN])) endN++;
-        out += '<span class="n">' + escapeHtml(code.slice(i, endN)) + '</span>';
-        i = endN;
-        continue;
-      }
-
-      out += escapeHtml(ch);
-      i++;
+      if (/[0-9]/.test(ch)) { var endN = i; while (endN < n && /[0-9.]/.test(code[endN])) endN++; out += '<span class="n">' + escapeHtml(code.slice(i, endN)) + '</span>'; i = endN; continue; }
+      out += escapeHtml(ch); i++;
     }
     return out;
   }
-
   function applyHighlight() {
     var blocks = document.querySelectorAll('pre code[id]');
     for (var j = 0; j < blocks.length; j++) {
-      var el = blocks[j];
-      var raw = el.textContent;
-      try { el.innerHTML = highlight(raw); }
-      catch (e) { el.textContent = raw; }
+      var el = blocks[j], raw = el.textContent;
+      try { el.innerHTML = highlight(raw); } catch (e) { el.textContent = raw; }
     }
   }
-
-  /* ============ COPY BUTTONS ============ */
   function wireCopyButtons() {
     var btns = document.querySelectorAll('.copy-btn[data-copy]');
     for (var k = 0; k < btns.length; k++) {
@@ -1809,94 +1006,50 @@ node_modules/</code></pre>
           var id = btn.getAttribute('data-copy');
           var el = document.getElementById(id);
           if (!el) { showToast('❌ Target missing'); return; }
-
           copyToClipboard(el.textContent).then(function (ok) {
             if (!ok) { showToast('❌ Copy failed'); return; }
             var orig = btn.innerHTML;
-            btn.classList.add('copied');
-            btn.innerHTML = '✅ Copied';
-            showToast('✅ Code copied!');
-            setTimeout(function () {
-              btn.classList.remove('copied');
-              btn.innerHTML = orig;
-            }, 1600);
+            btn.classList.add('copied'); btn.innerHTML = '✅ Copied'; showToast('✅ Code copied!');
+            setTimeout(function () { btn.classList.remove('copied'); btn.innerHTML = orig; }, 1600);
           });
         });
       })(btns[k]);
     }
   }
-
-  /* ============ ACTIVE TRACKING ============ */
   function wireActiveTracking() {
     var sections = document.querySelectorAll('section[id]');
     var links = document.querySelectorAll('.sidebar nav a');
     if (!('IntersectionObserver' in window)) return;
-
     var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
           var id = entry.target.id;
-          links.forEach(function (l) {
-            l.classList.toggle('active', l.getAttribute('href') === '#' + id);
-          });
+          links.forEach(function (l) { l.classList.toggle('active', l.getAttribute('href') === '#' + id); });
         }
       });
     }, { rootMargin: '-30% 0px -60% 0px' });
-
     sections.forEach(function (s) { observer.observe(s); });
   }
-
-  /* ============ MOBILE MENU ============ */
   function wireMobileMenu() {
     var toggle = document.getElementById('menuToggle');
     var sidebar = document.getElementById('sidebar');
     var overlay = document.getElementById('overlay');
-
-    function close() {
-      sidebar.classList.remove('open');
-      overlay.classList.remove('visible');
-    }
-
-    toggle.addEventListener('click', function () {
-      sidebar.classList.toggle('open');
-      overlay.classList.toggle('visible');
-    });
-
+    function close() { sidebar.classList.remove('open'); overlay.classList.remove('visible'); }
+    toggle.addEventListener('click', function () { sidebar.classList.toggle('open'); overlay.classList.toggle('visible'); });
     overlay.addEventListener('click', close);
-
-    sidebar.querySelectorAll('a').forEach(function (a) {
-      a.addEventListener('click', function () {
-        if (window.innerWidth <= 900) close();
-      });
-    });
+    sidebar.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { if (window.innerWidth <= 900) close(); }); });
   }
-
-  /* ============ BACK TO TOP ============ */
   function wireBackTop() {
     var btn = document.getElementById('backTop');
-    window.addEventListener('scroll', function () {
-      btn.classList.toggle('visible', window.scrollY > 400);
-    });
-    btn.addEventListener('click', function () {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    window.addEventListener('scroll', function () { btn.classList.toggle('visible', window.scrollY > 400); });
+    btn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
   }
-
-  /* ============ INIT ============ */
   function init() {
-    applyHighlight();
-    wireCopyButtons();
-    wireActiveTracking();
-    wireMobileMenu();
-    wireBackTop();
-    console.log('✅ PathumTech Docs ready');
+    applyHighlight(); wireCopyButtons(); wireActiveTracking(); wireMobileMenu(); wireBackTop();
+    console.log('✅ PathumTech Docs ready — 10 modules loaded');
   }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', init); }
+  else { init(); }
 })();
 </script>
 
